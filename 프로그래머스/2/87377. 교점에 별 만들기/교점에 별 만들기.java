@@ -40,12 +40,12 @@ class Solution {
         }
         for (long[] dot : dots) {
             int x = (int) (dot[0] - minX);
-            int y = (int) (dot[1] - minY);
+            int y = (int) (maxY - dot[1]);
             board[y][x] = '*';
         }
         String[] answer = new String[height];
         for (int i = 0; i < answer.length; i++) {
-            answer[i] = new String(board[board.length - i - 1]);
+            answer[i] = new String(board[i]);
         }
         return answer;
     }
