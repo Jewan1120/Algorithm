@@ -6,7 +6,7 @@ FROM
 WHERE
     APNT_YMD LIKE '2022-05%'
 GROUP BY
-    MCDP_CD
+    `진료과코드`
 ORDER BY
-    COUNT(*)
-    , MCDP_CD
+    `5월예약건수`
+    , `진료과코드`
