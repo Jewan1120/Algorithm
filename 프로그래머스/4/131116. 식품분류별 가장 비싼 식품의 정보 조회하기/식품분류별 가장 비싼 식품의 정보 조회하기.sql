@@ -1,17 +1,22 @@
 SELECT
-    CATEGORY,
-    PRICE MAX_PRICE,
-    PRODUCT_NAME
+    CATEGORY
+    , MAX(PRICE) MAX_PRICE
+    , PRODUCT_NAME
 FROM
     FOOD_PRODUCT
 WHERE
-    PRICE IN (
+    (CATEGORY, PRICE) in (
         SELECT
-            MAX(PRICE)
-        FROM 
+            CATEGORY
+            , MAX(PRICE)
+        FROM
             FOOD_PRODUCT
-        GROUP BY CATEGORY
-    )
-    AND CATEGORY REGEXP '^(과자|국|김치|식용유)$'
-ORDER BY 
-    PRICE DESC
+        WHERE
+            CATEGORY IN ('과자', '국', '김치', '식용유')
+        GROUP BY
+            CATEGORY
+        )
+GROUP BY
+    CATEGORY
+ORDER BY
+    MAX_PRICE DESC
