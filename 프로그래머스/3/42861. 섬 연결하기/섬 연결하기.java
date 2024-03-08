@@ -12,7 +12,7 @@ class Solution {
             int rootY = find(parent, costs[i][1]);
             int weight = costs[i][2];
             if (rootX != rootY) {
-                union(parent, rootX, rootY);
+                parent[rootX] = rootY;
                 answer += weight;
             }
         }
@@ -24,9 +24,5 @@ class Solution {
             parent[node] = find(parent, parent[node]);
         }
         return parent[node];
-    }
-
-    public void union(int[] parent, int rootX, int rootY) {
-        parent[rootX] = rootY;
     }
 }
