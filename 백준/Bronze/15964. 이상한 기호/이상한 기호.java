@@ -10,8 +10,8 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        long N = Long.parseLong(st.nextToken());
+        long M = Long.parseLong(st.nextToken());
         bw.write(String.valueOf((N * N) - (M * M)));
         bw.flush();
         bw.close();
