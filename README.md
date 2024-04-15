@@ -1,5 +1,8 @@
 # Algorithm
 
+* Portfolio
+* Contest
+
 ## ■ 프로그래머스 (23.09.28 ~
 - [x] Lv.0
 - [x] Lv.1
@@ -9,6 +12,3 @@
 - [ ] Lv.5
 
 ## ■ 백준 (23.04.12 ~
-
-* for Portfolio
-* SQL
