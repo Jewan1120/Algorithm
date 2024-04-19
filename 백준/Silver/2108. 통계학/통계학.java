@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
 public class Main {
@@ -35,12 +33,11 @@ public class Main {
                 mostArr[0] = arr[i];
             }
         }
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        bw.write((int) Math.round((double) sum / N) + "\n");
-        bw.write(arr[N / 2] + "\n");
-        bw.write(mostArr[0] + "\n");
-        bw.write((int) Math.abs(arr[N - 1] - arr[0]) + "\n");
-        bw.flush();
-        bw.close();
+        StringBuilder sb = new StringBuilder();
+        sb.append((int) Math.round((double) sum / N)).append("\n");
+        sb.append(arr[N / 2]).append("\n");
+        sb.append(mostArr[0]).append("\n");
+        sb.append((int) Math.abs(arr[N - 1] - arr[0])).append("\n");
+        System.out.println(sb.toString());
     }
 }
