@@ -1,0 +1,90 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        Myque que = new Myque();
+        int n = Integer.parseInt(br.readLine());
+        StringTokenizer st;
+        for (; n > 0; n--) {
+            st = new StringTokenizer(br.readLine());
+            String command = st.nextToken();
+            char c = command.charAt(0);
+            if (command.equals("push")) {
+                que.push(st.nextToken());
+            } else {
+                if (c == 'p') {
+                    bw.write(que.pop());
+                } else if (c == 's') {
+                    bw.write(que.size());
+                } else if (c == 'e') {
+                    bw.write(que.empty());
+                } else if (c == 'f') {
+                    bw.write(que.front());
+                } else if (c == 'b') {
+                    bw.write(que.back());
+                }
+                bw.newLine();
+            }
+        }
+        bw.flush();
+        bw.close();
+        br.close();
+    }
+
+    static class Myque {
+        Deque<String> que;
+
+        public Myque() {
+            que = new ArrayDeque<>();
+        }
+
+        public void push(String str) {
+            this.que.offer(str);
+        }
+
+        public String pop() {
+            if (!que.isEmpty()) {
+                return String.valueOf(que.poll());
+            } else {
+                return "-1";
+            }
+        }
+
+        public String size() {
+            return String.valueOf(que.size());
+        }
+
+        public String empty() {
+            if (!que.isEmpty()) {
+                return "0";
+            } else {
+                return "1";
+            }
+        }
+
+        public String front() {
+            if (!que.isEmpty()) {
+                return String.valueOf(que.peekFirst());
+            } else {
+                return "-1";
+            }
+        }
+
+        public String back() {
+            if (!que.isEmpty()) {
+                return String.valueOf(que.peekLast());
+            } else {
+                return "-1";
+            }
+        }
+    }
+}
