@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -10,7 +8,7 @@ public class Main {
     static int n;
     static int m;
     static int[] arr;
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,17 +17,16 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
         arr = new int[m];
         dfs(1, 0);
-        bw.close();
+        System.out.println(sb);
         br.close();
     }
 
     public static void dfs(int p, int depth) throws IOException {
         if (depth == m) {
             for (int i : arr) {
-                bw.write(i + " ");
+                sb.append(i).append(" ");
             }
-            bw.newLine();
-            bw.flush();
+            sb.append("\n");
             return;
         }
         for (int i = p; i <= n; i++) {
