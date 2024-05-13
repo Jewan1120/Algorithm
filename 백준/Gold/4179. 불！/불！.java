@@ -47,7 +47,6 @@ public class Main {
             }
         }
         dq.offer(new Node(s[0], s[1], 0, true));
-        int depth = 0;
         while (!dq.isEmpty()) {
             Node node = dq.poll();
             for (int i = 0; i < 4; i++) {
