@@ -48,23 +48,23 @@ public class Main {
         }
         dq.offer(new Node(s[0], s[1], 0, true));
         int depth = 0;
-        bfs: while (!dq.isEmpty()) {
+        while (!dq.isEmpty()) {
             Node node = dq.poll();
             for (int i = 0; i < 4; i++) {
                 int y = node.y + dy[i];
                 int x = node.x + dx[i];
-                if (node.type && !valid(y, x)) {
-                    System.out.println(node.depth + 1);
-                    return;
-                }
-                if (valid(y, x) && board[y][x]) {
+                if (!valid(y, x)) {
+                    if (node.type) {
+                        System.out.println(node.depth + 1);
+                        return;
+                    }
+                } else if (board[y][x]) {
                     dq.offer(new Node(y, x, node.depth + 1, node.type));
                     board[y][x] = false;
                 }
             } 
         }
         System.out.println("IMPOSSIBLE");
-        br.close();
     }
     
     public static boolean valid(int y, int x) {
