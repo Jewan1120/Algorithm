@@ -47,23 +47,23 @@ public class Main {
             }
         }
         dq.offer(new Node(s[0], s[1], 0, true));
-        int depth = Integer.MAX_VALUE;
-        while (!dq.isEmpty()) {
+        int depth = 0;
+        bfs: while (!dq.isEmpty()) {
             Node node = dq.poll();
             for (int i = 0; i < 4; i++) {
                 int y = node.y + dy[i];
                 int x = node.x + dx[i];
-                if (!valid(y, x)) {
-                    if (node.type) {
-                        depth = Math.min(depth, node.depth + 1);
-                    }
-                }else if (board[y][x]) {
+                if (node.type && !valid(y, x)) {
+                    depth = node.depth + 1;
+                    break bfs;
+                }
+                if (valid(y, x) && board[y][x]) {
                     dq.offer(new Node(y, x, node.depth + 1, node.type));
                     board[y][x] = false;
                 }
             } 
         }
-        System.out.println(depth != Integer.MAX_VALUE ? depth : "IMPOSSIBLE");
+        System.out.println(depth != 0 ? depth : "IMPOSSIBLE");
         br.close();
     }
     
