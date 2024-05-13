@@ -54,8 +54,8 @@ public class Main {
                 int y = node.y + dy[i];
                 int x = node.x + dx[i];
                 if (node.type && !valid(y, x)) {
-                    depth = node.depth + 1;
-                    break bfs;
+                    System.out.println(node.depth + 1);
+                    return;
                 }
                 if (valid(y, x) && board[y][x]) {
                     dq.offer(new Node(y, x, node.depth + 1, node.type));
@@ -63,7 +63,7 @@ public class Main {
                 }
             } 
         }
-        System.out.println(depth != 0 ? depth : "IMPOSSIBLE");
+        System.out.println("IMPOSSIBLE");
         br.close();
     }
     
