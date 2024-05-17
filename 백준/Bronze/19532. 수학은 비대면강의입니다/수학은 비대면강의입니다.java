@@ -15,8 +15,7 @@ public class Main {
         int e = Integer.parseInt(st.nextToken());
         int f = Integer.parseInt(st.nextToken());
         StringBuilder sb = new StringBuilder();
-        int x = (c * e - b * f) / (a * e - b * d);
-        int y = (c * d - a * f) / (b * d - a * e);
-        System.out.println(sb.append(x).append(" ").append(y));
+        System.out.println(sb.append((c * e - b * f) / (a * e - b * d)).append(" ")
+                .append((c * d - a * f) / (b * d - a * e)));
     }
 }
