@@ -37,7 +37,7 @@ public class Main {
             while (!dq.isEmpty()) {
                 int cur = dq.poll();
                 if (cur == n + 1) {
-                    System.out.println("happy");
+                    sb.append("happy").append("\n");
                     continue next;
                 }
                 for (int i = 0; i < n + 2; i++) {
@@ -47,7 +47,8 @@ public class Main {
                     }
                 }
             }
-            System.out.println("sad");
+            sb.append("sad").append("\n");
         }
+        System.out.println(sb);
     }
 }
