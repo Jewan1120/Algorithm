@@ -4,23 +4,17 @@ import java.io.InputStreamReader;
 
 public class Main {
 
-    static boolean[][] board;
     static int cnt = 0;
     static int n;
-    static int[] dy = {-1, -1, -1};
-    static int[] dx = {-1, 0, 1};
+    static boolean[] cols, d1, d2;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
-        board = new boolean[n][n];
-        for (int i = 0; i < n; i++) {
-            if (!board[0][i]) {
-                board[0][i] = true;
-                dfs(1);
-                board[0][i] = false;
-            }
-        }
+        cols = new boolean[n];
+        d1 = new boolean[2 * n - 1];
+        d2 = new boolean[2 * n - 1];
+        dfs(0);
         System.out.println(cnt);
     }
 
@@ -30,24 +24,11 @@ public class Main {
             return;
         }
         for (int i = 0; i < n; i++) {
-            if (isValid(depth, i)) {
-                board[depth][i] = true;
+            if (!cols[i] && !d1[depth - i + n - 1] && !d2[depth + i]) {
+                cols[i] = d1[depth - i + n - 1] = d2[depth + i] = true;
                 dfs(depth + 1);
-                board[depth][i] = false;
+                cols[i] = d1[depth - i + n - 1] = d2[depth + i] = false;
             }
         }
-    }
-
-    public static boolean isValid(int y, int x) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 1; j <= y; j++) {
-                int ny = y + j * dy[i];
-                int nx = x + j * dx[i];
-                if (0 <= ny && ny < n && 0 <= nx && nx < n && board[ny][nx]) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }
