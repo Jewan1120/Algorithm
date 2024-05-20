@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class Main {
 
@@ -21,18 +17,16 @@ public class Main {
     static int maxNode;
     static int maxWeight;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        int n = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws Exception {
+        Reader in = new Reader();
+        int n = in.nextInt();
         for (int i = 0; i <= n; i++) {
             tree.add(new ArrayList<>());
         }
         for (int i = 0; i < n - 1; i++) {
-            st = new StringTokenizer(br.readLine());
-            int v = Integer.parseInt(st.nextToken());
-            int u = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
+            int v = in.nextInt();
+            int u = in.nextInt();;
+            int w = in.nextInt();
             tree.get(v).add(new Node(u, w));
             tree.get(u).add(new Node(v, w));
         }
@@ -53,6 +47,40 @@ public class Main {
             if (!visited[next.t]) {
                 dfs(next.t, weight + next.w);
             }
+        }
+    }
+
+    static class Reader {
+
+        private final int SIZE = 1 << 13;
+
+        private byte[] buffer = new byte[SIZE];
+        private int index;
+        private int size;
+
+        private int n;
+        private byte c;
+
+        public int nextInt() throws Exception {
+            n = 0;
+            while ((c = read()) <= 32);
+            do
+                n = (n << 3) + (n << 1) + (c & 15);
+            while (isNumber(c = read()));
+            return n;
+        }
+
+        private boolean isNumber(byte c) {
+            return 47 < c && c < 58;
+        }
+
+        private byte read() throws Exception {
+            if (index == size) {
+                size = System.in.read(buffer, index = 0, SIZE);
+                if (size < 0)
+                    buffer[0] = -1;
+            }
+            return buffer[index++];
         }
     }
 }
