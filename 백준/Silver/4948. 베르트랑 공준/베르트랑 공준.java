@@ -9,14 +9,16 @@ public class Main {
                 }
             }
         }
+        int[] cntArr = new int[246913];
+        int cnt = 0;
+        for (int i = 0; i < 246913; i++) {
+            if (!prime[i]) cnt++;
+            cntArr[i] = cnt;
+        }
         StringBuilder sb = new StringBuilder();
         int n;
         while((n = read()) > 0) {
-            int cnt = 0;
-            for (int i = n + 1; i <= 2 * n; i++) {
-                if (!prime[i]) cnt++;
-            }
-            sb.append(cnt).append("\n");
+            sb.append(cntArr[2 * n] - cntArr[n]).append("\n");
         }
         System.out.println(sb);
     }
