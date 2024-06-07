@@ -6,7 +6,7 @@ public class Main {
                 board[i][j] = read();
             }
         }
-        sudoku();
+        sudoku(0);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -16,15 +16,15 @@ public class Main {
         }
         System.out.println(sb);
     }
-    private static boolean sudoku() {
-        for (int i = 0; i < 9; i++) {
+    private static boolean sudoku(int y) {
+        for (int i = y; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (board[i][j] == 0) {
                     boolean[] chk = possible(i, j);
                     for (int k = 1; k <= 9; k++) {
                         if (!chk[k]) {
                             board[i][j] = k;
-                            if (sudoku()) return true;
+                            if (sudoku(i)) return true;
                             board[i][j] = 0;
                         }
                     }
