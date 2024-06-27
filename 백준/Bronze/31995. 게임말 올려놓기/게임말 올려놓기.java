@@ -1,7 +1,6 @@
 public class Main {
     public static void main(String[] args) throws Exception {
-        int n = read(), m = read();
-        System.out.println(((n - 2) * 2 + 2) * (m - 1));
+        System.out.println(((read() - 1) * 2) * (read() - 1));
     }
     private static int read() throws Exception {
         int c, n = System.in.read() & 15;
