@@ -1,20 +1,25 @@
 class Solution {
     public long solution(int cap, int n, int[] deliveries, int[] pickups) {
         long answer = 0;
-        int deli = 0;
-        int pick = 0;
+        int deliveryOverLoad = 0;
+        int pickUpOverLoad = 0;
         for (int i = n - 1; i >= 0; i--) {
-            if (deliveries[i] != 0 || pickups[i] != 0) {
-                int cnt = 0;
-                while (deliveries[i] > deli || pickups[i] > pick) {
+            int cnt = 0;
+            if (deliveries[i] > 0 || pickups[i] > 0) {
+                deliveries[i] -= deliveryOverLoad;
+                pickups[i] -= pickUpOverLoad;
+                while (deliveries[i] > 0 || pickups[i] > 0) {
                     cnt++;
-                    deli += cap;
-                    pick += cap;
+                    deliveries[i] -= cap;
+                    pickups[i] -= cap;
                 }
-                deli -= deliveries[i];
-                pick -= pickups[i];
-                answer += (i + 1) * 2 * cnt;
+                deliveryOverLoad = -(deliveries[i]);
+                pickUpOverLoad = -(pickups[i]);
+                deliveries[i] = 0;
+                pickups[i] = 0;
+
             }
+            answer += (i + 1) * 2 * cnt;
         }
         return answer;
     }
