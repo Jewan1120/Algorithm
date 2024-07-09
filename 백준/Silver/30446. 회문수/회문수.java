@@ -25,16 +25,24 @@ public class Main {
     }
 
     private static long EvenPal(int num) {
-        String s = Integer.toString(num);
-        StringBuilder sb = new StringBuilder(s);
-        sb.reverse();
-        return Long.parseLong(s + sb.toString());
+        int temp = num;
+        int len = ((int) Math.log10(num) + 1);
+        long pal = num * (long) Math.pow(10, len);
+        for (int i = 1; i <= len; i++) {
+            pal += (temp % 10) * (long) Math.pow(10, len - i);
+            temp /= 10;
+        }
+        return pal;
     }
 
     private static long OddPal(int num) {
-        String s = Integer.toString(num);
-        StringBuilder sb = new StringBuilder(s);
-        sb.reverse().deleteCharAt(0);
-        return Long.parseLong(s + sb.toString());
+        int temp = num / 10;
+        int len = (int) Math.log10(num);
+        long pal = num * (long) Math.pow(10, len);
+        for (int i = 1; i <= len; i++) {
+            pal += (temp % 10) * (long) Math.pow(10, len - i);
+            temp /= 10;
+        }
+        return pal;
     }
 }
