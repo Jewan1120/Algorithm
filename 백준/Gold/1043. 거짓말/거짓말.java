@@ -1,6 +1,3 @@
-import java.util.HashSet;
-import java.util.Set;
-
 public class Main {
 
     static int[] parent;
@@ -10,11 +7,9 @@ public class Main {
         parent = new int[n + 1];
         for (int i = 1; i <= n; i++)
             parent[i] = i;
-        Set<Integer> knowPeople = new HashSet<>();
         int kp = read();
         while (kp-- > 0) {
             int knowPerson = read();
-            knowPeople.add(knowPerson);
             parent[knowPerson] = 0;
         }
         int[][] parties = new int[m][];
@@ -50,7 +45,6 @@ public class Main {
             int max = Math.max(rootX, rootY);
             int min = Math.min(rootX, rootY);
             parent[max] = min;
-
         }
     }
 
