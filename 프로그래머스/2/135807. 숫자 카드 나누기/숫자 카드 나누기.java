@@ -1,6 +1,9 @@
+import java.util.Arrays;
 class Solution {
-    public static int solution(int[] arrayA, int[] arrayB) {
+    public int solution(int[] arrayA, int[] arrayB) {
         int answer = 0;
+        Arrays.sort(arrayA);
+        Arrays.sort(arrayB);
         int gcdA = arrayA[0];
         int gcdB = arrayB[0];
         for (int i = 1; i < arrayA.length; i++) {
