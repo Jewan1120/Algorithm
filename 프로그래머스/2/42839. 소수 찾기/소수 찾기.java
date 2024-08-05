@@ -1,53 +1,54 @@
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 class Solution {
+    
+    static boolean[] isPrime;
+    static boolean[] visited;
+    static int[] result;
+    static int[] nums;
+    static HashSet<Integer> chk = new HashSet<>();
+    
     public int solution(String numbers) {
-        int answer = 0;
-        String[] parts = numbers.split("");
-        Arrays.sort(parts, (o1, o2) -> o2.compareTo(o1));
-        StringBuilder sb = new StringBuilder();
-        for (String str : parts) {
-            sb.append(str);
+        String[] strArr = numbers.split("");
+        nums = new int[strArr.length];
+        Arrays.sort(strArr, (o1, o2) -> o2.compareTo(o1));
+        for (int i = 0; i < strArr.length; i++) {
+            nums[i] = Integer.parseInt(strArr[i]);
         }
-        int max = Integer.parseInt(sb.toString());
-        boolean[] primeChk = new boolean[max + 1];
-        HashSet<Integer> primeSet = new HashSet<>();
-        primeChk[0] = primeChk[1] = true;
-        for (int i = 2; i <= max; i++) {
-            if (!primeChk[i]) {
-                primeSet.add(i);
-                for (int j = i; j <= max; j += i) {
-                    primeChk[j] = true;
-                }
+        int maxNum = 0;
+        for (int i : nums) {
+            maxNum *= 10;
+            maxNum += i;
+        }
+        isPrime = new boolean[maxNum + 1];
+        isPrime[0] = isPrime[1] = true;
+        for (int i = 2; i <= Math.sqrt(maxNum); i++) {
+            if (!isPrime[i]) {
+                for (int j = i + i; j <= maxNum; j += i)
+                    isPrime[j] = true;
             }
         }
-        Queue<boolean[]> que = new LinkedList<>();
-        Queue<StringBuilder> strQue = new LinkedList<>();
-        HashSet<Integer> hs = new HashSet<>();
-        que.add(new boolean[parts.length]);
-        strQue.add(new StringBuilder());
-        while(!que.isEmpty()){
-            boolean[] visited = que.poll();
-            sb = new StringBuilder(strQue.poll());
-            if(sb.length() > 0){
-                hs.add(Integer.parseInt(sb.toString()));
-            }
-            for(int i = 0; i < visited.length; i++){
-                if(!visited[i]){
-                    visited[i] = true;
-                    sb.append(parts[i]);
-                    que.add(visited.clone());
-                    strQue.add(new StringBuilder(sb));
-                    visited[i] = false;
-                    sb.deleteCharAt(sb.length() - 1);
-                }
+        visited = new boolean[nums.length];
+        result = new int[nums.length];
+        recursive(0);
+        return chk.size();
+    }
+    
+    private void recursive(int depth) {
+        int num = 0;
+        for (int i = 0; i < depth; i++) {
+            num *= 10;
+            num += result[i];
+        }
+        if (!isPrime[num])
+            chk.add(num);
+        for (int i = 0; i < nums.length; i++) {
+            if (!visited[i]) {
+                result[depth] = nums[i];
+                visited[i] = true;
+                recursive(depth + 1);
+                visited[i] = false;
             }
         }
-        for(Integer i : hs) {
-            if(primeSet.contains(i)) answer++;
-        }
-        return answer;
     }
 }
