@@ -1,18 +1,42 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 class Solution {
+    
+    int[] dateChk = new int[3];
+    
     public int[] solution(String today, String[] terms, String[] privacies) {
-        int intToday = strToInt(today);
-        HashMap<String, Integer> termsMap = new HashMap<>();
+        String[] date = today.split("\\.");
+        for (int i = 0; i < 3; i++) {
+            dateChk[i] = Integer.parseInt(date[i]);
+        }
+        HashMap<String, Integer> hm = new HashMap<>();
         for (int i = 0; i < terms.length; i++) {
-            String[] StrArr = terms[i].split(" ");
-            termsMap.put(StrArr[0], Integer.parseInt(StrArr[1]));
+            String[] term = terms[i].split(" ");
+            hm.put(term[0], Integer.parseInt(term[1]));
         }
         ArrayList<Integer> al = new ArrayList<>();
         for (int i = 0; i < privacies.length; i++) {
-            String[] StrArr = privacies[i].split(" ");
-            int privacyDate = strToInt(StrArr[0]) + termsMap.get(StrArr[1]) * 28 - 1;
-            if (intToday > privacyDate)
+            String[] privacy = privacies[i].split(" ");
+            String[] dateStrPart = privacy[0].split("\\.");
+            int[] datePart = new int[3];
+            for (int j = 0; j < 3; j++) {
+                datePart[j] = Integer.parseInt(dateStrPart[j]);
+            }
+            datePart[1] += hm.get(privacy[1]);
+            if (datePart[1] > 12) {
+                datePart[0]++;
+                datePart[1] %= 12;
+            }
+            datePart[2]--;
+            if (datePart[2] == 0) {
+                datePart[1]--;
+                datePart[2] = 28;
+                if(datePart[1] == 0) {
+                    datePart[0]--;
+                    datePart[1] = 12;
+                }
+            }
+            if (!isPossible(datePart))
                 al.add(i + 1);
         }
         int[] answer = new int[al.size()];
@@ -20,13 +44,13 @@ class Solution {
             answer[i] = al.get(i);
         return answer;
     }
-
-    private int strToInt(String StrDate) {
-        int intDate = 0;
-        String[] strArr = StrDate.split("\\.");
-        intDate += (Integer.parseInt(strArr[0]) - 2000) * 12 * 28;
-        intDate += Integer.parseInt(strArr[1]) * 28;
-        intDate += Integer.parseInt(strArr[2]);
-        return intDate;
+    
+    private boolean isPossible(int[] datePart) {
+        for (int i = 0; i < 3; i++) {
+            if (datePart[i] < dateChk[i]) { 
+                return false;
+            }
+        }
+        return true;
     }
 }
