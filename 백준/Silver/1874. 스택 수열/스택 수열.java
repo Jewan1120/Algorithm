@@ -1,29 +1,33 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Stack;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws Exception {
+        int n = read();
         int[] arr = new int[n];
-        for (int i = 0; i < n; i++)
-            arr[i] = Integer.parseInt(br.readLine());
         Stack<Integer> stk = new Stack<>();
         StringBuilder sb = new StringBuilder();
-        int p = 0;
+        for (int i = 0; i < n; i++)
+            arr[i] = read();
+        int idx = 0;
         for (int i = 1; i <= n; i++) {
             stk.push(i);
             sb.append("+\n");
-            while (!stk.isEmpty() && stk.peek() == arr[p]) {
+            while (!stk.isEmpty() && stk.peek() == arr[idx]) {
                 stk.pop();
                 sb.append("-\n");
-                p++;
+                idx++;
             }
         }
-        if (!stk.isEmpty())
-            sb = new StringBuilder("NO");
-        System.out.println(sb.toString());
+        if (!stk.isEmpty()) {
+            System.out.println("NO");
+            return;
+        }
+        System.out.println(sb);
+    }
+    
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
