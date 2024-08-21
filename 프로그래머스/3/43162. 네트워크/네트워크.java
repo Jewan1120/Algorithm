@@ -1,30 +1,36 @@
-import java.util.ArrayDeque;
-import java.util.Queue;
 class Solution {
+    
+    private int[] parent;
+    
     public int solution(int n, int[][] computers) {
         int answer = 0;
-        boolean[] chk = new boolean[computers.length];
-        for (int i = 0; i < computers.length; i++) {
-            if (chk[i]) {
-                continue;
-            }
-            answer++;
-            Queue<Integer> que = new ArrayDeque<>();
-            que.add(i);
-            while (!que.isEmpty()) {
-                int p = que.poll();
-                if (chk[p]) {
+        parent = new int[n + 1];
+        for (int i = 1; i <= n; i++)
+            parent[i] = i;
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++) {
+                if (i == j)
                     continue;
-                }
-                chk[p] = true;
-                for (int j = 0; j < computers.length; j++) {
-                    if (chk[j] || computers[p][j] == 0) {
-                        continue;
-                    }
-                    que.add(j);
-                }
+                if (computers[i][j] == 1)
+                    union(i, j);
             }
-        }
-        return answer;
+        for (int i = 0; i < n; i++)
+            if (find(i) == i)
+                answer++;
+        return answer; 
+    }
+    
+    private void union(int v, int u) {
+        int rootV = find(v);
+        int rootU = find(u);
+        if (rootV != rootU)
+            parent[rootV] = rootU;
+    }
+
+    private int find(int v) {
+        if (parent[v] != v)
+            parent[v] = find(parent[v]);
+        return parent[v];
     }
 }
