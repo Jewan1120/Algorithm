@@ -1,47 +1,35 @@
 import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.Deque;
 class Solution {
     public int solution(String begin, String target, String[] words) {
-        int answer = Integer.MAX_VALUE;
-        Queue<String> strQue = new ArrayDeque<>();
-        Queue<Integer> cntQue = new ArrayDeque<>();
-        Queue<boolean[]> chkQue = new ArrayDeque<>();
-        strQue.add(begin);
-        cntQue.add(0);
-        chkQue.add(new boolean[words.length]);
-        while (!strQue.isEmpty()) {
-            String prev = strQue.poll();
-            int cnt = cntQue.poll();
-            boolean[] chk = chkQue.poll();
-            if (prev.equals(target)) {
-                answer = Math.min(answer, cnt);
-                continue;
-            }
-            for (int i = 0; i < chk.length; i++) {
-                String next = words[i];
-                if (!chk[i] && chk(prev, next)) {
-                    chk[i] = true;
-                    strQue.add(next);
-                    cntQue.add(cnt + 1);
-                    chkQue.add(chk.clone());
-                    chk[i] = false;
+        Deque<String> dq = new ArrayDeque<>();
+        dq.offer(begin);
+        int cnt = 0;
+        boolean[] visited = new boolean[words.length];
+        while (!dq.isEmpty()) {
+            int t = dq.size();
+            while (t-- > 0) {
+                String str = dq.poll();
+                if (str.equals(target)) {
+                    return cnt;
+                }
+                for (int i = 0; i < words.length; i++) {
+                    if (!visited[i] && isPossible(str, words[i])) {
+                        visited[i] = true;
+                        dq.offer(words[i]);
+                    }
                 }
             }
+            cnt++;
         }
-        if (answer == Integer.MAX_VALUE) {
-            answer = 0;
-        }
-        return answer;
+        return 0;
     }
-    public boolean chk(String prev, String next) {
-        char[] prevArr = prev.toCharArray();
-        char[] nextArr = next.toCharArray();
+    
+    private boolean isPossible(String A, String B) {
         int cnt = 0;
-        for (int i = 0; i < prevArr.length; i++) {
-            if (prevArr[i] != nextArr[i]) {
+        for (int i = 0; i < A.length(); i++)
+            if (A.charAt(i) != B.charAt(i))
                 cnt++;
-            }
-        }
-        return cnt == 1 ? true : false;
+        return cnt == 1;
     }
 }
