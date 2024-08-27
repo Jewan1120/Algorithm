@@ -7,17 +7,16 @@ public class Main {
         n = read();
         int[][] board = new int[n][n];
         for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < n; j++) {
                 board[i][j] = read();
+                max = Math.max(max, board[i][j]);
+            }
         recursion(board, 0);
         System.out.println(max);
     }
 
     private static void recursion(int[][] board, int depth) {
         if (depth == 5) {
-            for (int i = 0; i < n; i++)
-                for (int j = 0; j < n; j++)
-                    max = Math.max(max, board[i][j]);
             return;
         }
         for (int i = 0; i < 4; i++) {
@@ -65,6 +64,7 @@ public class Main {
             board[ny][nx] *= 2;
             board[y][x] = 0;
             merged[ny][nx] = true;
+            max = Math.max(max, board[ny][nx]);
         }
     }
 
