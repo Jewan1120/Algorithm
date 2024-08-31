@@ -52,14 +52,15 @@ public class Main {
                     curMoney -= room.money;
                 if (room.type == 'L')
                     curMoney = Math.max(curMoney, room.money);
-                visited[cur[0]] = curMoney;
                 if (cur[0] == n) {
                     possible = true;
                     break;
                 }
                 for (int next : room.to)
-                    if (curMoney > visited[next])
+                    if (curMoney > visited[next]) {
                         dq.offer(new int[] { next, curMoney });
+                        visited[next] = curMoney;
+                    }
             }
             sb.append(possible ? "Yes" : "No").append("\n");
         }
