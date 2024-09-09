@@ -21,12 +21,12 @@ public class Main {
         long min3 = 3_000_001;
         for (int i = 0; i < 6; i++) {
             min1 = Math.min(min1, dice[i]);
-            for (int j = 0; j < 6; j++) {
-                if (i == j || i + j == 5)
+            for (int j = i + 1; j < 6; j++) {
+                if (i + j == 5)
                     continue;
                 min2 = Math.min(min2, dice[i] + dice[j]);
-                for (int k = 0; k < 6; k++) {
-                    if (i == k || j == k || i + k == 5 || j + k == 5)
+                for (int k = j + 1; k < 6; k++) {
+                    if (i + k == 5 || j + k == 5)
                         continue;
                     min3 = Math.min(min3, dice[i] + dice[j] + dice[k]);
                 }
