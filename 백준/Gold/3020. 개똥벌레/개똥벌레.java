@@ -1,25 +1,20 @@
-import java.util.Arrays;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
         int n = read(), h = read();
-        int[] toUp = new int[n / 2];
-        int[] toDw = new int[n / 2];
+        int[] toUp = new int[h + 1];
+        int[] toDw = new int[h + 1];
         for (int i = 0; i < n / 2; i++) {
-            toUp[i] = read();
-            toDw[i] = read();
+            toUp[read()]++;
+            toDw[read()]++;
         }
-        Arrays.sort(toUp);
-        Arrays.sort(toDw);
+        for (int i = h - 1; i > 0; i--) {
+            toUp[i] += toUp[i + 1];
+            toDw[i] += toDw[i + 1];
+        }
         int min = n, cnt = 0;
-        int l = 0, r = 0;
         for (int i = 1; i <= h; i++) {
-            while (l < n / 2 && toUp[l] < i)
-                l++;
-            while (r < n / 2 && toDw[(n / 2) - r - 1] > h - i)
-                r++;
-            int broken = (n / 2 - l) + r;
+            int broken = toUp[i] + toDw[h - i + 1];
             if (broken < min) {
                 min = broken;
                 cnt = 1;
@@ -33,6 +28,8 @@ public class Main {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
         return n;
     }
 }
