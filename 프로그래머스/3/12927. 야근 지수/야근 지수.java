@@ -1,43 +1,31 @@
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.PriorityQueue;
 class Solution {
     public long solution(int n, int[] works) {
-        long answer = Long.MAX_VALUE;
-        Queue<int[]> wQue = new ArrayDeque<>();
-        Queue<boolean[]> chkQue = new ArrayDeque<>();
-        Queue<Integer> nQue = new ArrayDeque<>();
-        wQue.add(works);
-        chkQue.add(new boolean[works.length]);
-        nQue.add(n);
-        while (!wQue.isEmpty()) {
-            int[] wArr = wQue.poll();
-            boolean[] chkArr = chkQue.poll();
-            int tmpN = nQue.poll();
-            if (tmpN == 0) {
-                long result = 0;
-                for (int i : wArr) {
-                    result += Math.pow(i, 2);
-                }
-                answer = Math.min(answer, result);
-                continue;
+        long answer = 0;
+        if (works.length == 1)
+            return (long) Math.pow(Math.max(0, works[0] - n), 2);
+        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        for (int i = 0; i < works.length; i++)
+            pq.offer(works[i]);
+        while (n > 0) {
+            int most = pq.poll();
+            if (most == 0)
+                return 0;
+            int diff = most - pq.peek();
+            if (diff == 0) {
+                most--;
+                n--;
+            } else if (n < diff) {
+                most -= n;
+                n = 0;
+            } else {
+                most -= diff;
+                n -= diff;
             }
-            for (int i = 0; i < chkArr.length; i++) {
-                if (!chkArr[i]) {
-                    chkArr[i] = true;
-                    for (int j = 1; j <= wArr[i]; j++) {
-                        int[] tmpW = wArr.clone();
-                        tmpW[i] -= j;
-                        wQue.add(tmpW);
-                        chkQue.add(chkArr.clone());
-                        nQue.add(tmpN - j);
-                    }
-                    chkArr[i] = false;
-                }
-            }
+            pq.offer(most);
         }
-        if (answer == Long.MAX_VALUE) {
-            answer = 0;
-        }
+        for (int i = 0; i < works.length; i++)
+            answer += (long) Math.pow(pq.poll(), 2);
         return answer;
     }
 }
