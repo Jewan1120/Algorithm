@@ -1,15 +1,23 @@
+WITH CTE AS (
+    SELECT
+        BOARD_ID
+    FROM
+        USED_GOODS_BOARD
+    ORDER BY
+        VIEWS DESC
+    LIMIT 1
+)
+ 
 SELECT
-    CONCAT('/home/grep/src/', A.BOARD_ID , '/', FILE_ID, FILE_NAME, FILE_EXT) FILE_PATH
-FROM
-    USED_GOODS_BOARD A
-    INNER JOIN USED_GOODS_FILE B
-        ON A.BOARD_ID = B.BOARD_ID
+    CONCAT('/home/grep/src/', BOARD_ID, '/', FILE_ID, FILE_NAME, FILE_EXT) AS FILE_PATH
+FROM 
+    USED_GOODS_FILE
 WHERE
-    VIEWS IN (
+    BOARD_ID = (
         SELECT
-            MAX(VIEWS)
+            BOARD_ID
         FROM
-            USED_GOODS_BOARD
+            CTE
     )
 ORDER BY
     FILE_ID DESC
