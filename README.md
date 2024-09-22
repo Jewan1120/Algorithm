@@ -1,7 +1,6 @@
 # Algorithm
 
 * Portfolio
-* Contest
 
 ## ■ 프로그래머스 (23.09.28 ~
 - [x] Lv.0
