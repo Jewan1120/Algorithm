@@ -1,27 +1,29 @@
 import java.util.Arrays;
 class Solution {
     public int solution(int distance, int[] rocks, int n) {
-        int answer = 0;
         Arrays.sort(rocks);
         int l = 1, r = distance;
         while (l <= r) {
             int m = (l + r) / 2;
-            int now = 0;
-            int removed = 0;
-            for (int i = 0; i < rocks.length; i++) {
-                if (rocks[i] < now + m)
-                    removed++;
-                else
-                    now = rocks[i];
-            }
-            if (distance < now + m)
-                removed++;
-            if (removed <= n) {
-                answer = m;
+            if (isPossible(distance, rocks, m, n)) {
                 l = m + 1;
             } else
                 r = m - 1;
         }
-        return answer;
+        return r;
+    }
+    
+    private boolean isPossible(int distance, int[] rocks, int target, int n) {
+        int now = 0;
+        int removed = 0;
+        for (int i = 0; i < rocks.length; i++) {
+            if (rocks[i] < now + target)
+                removed++;
+            else
+                now = rocks[i];
+        }
+        if (distance < now + target)
+            removed++;
+        return removed <= n;
     }
 }
