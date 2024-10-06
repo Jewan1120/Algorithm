@@ -38,12 +38,16 @@ public class Main {
         PriorityQueue<Edge> pq = new PriorityQueue<>((o1, o2) -> Double.compare(o1.distance, o2.distance));
         pq.offer(new Edge(0, 0));
         double mstDistance = 0;
+        int cnt = 0;
         while (!pq.isEmpty()) {
             Edge cur = pq.poll();
             int u = cur.to;
             if (visited[u])
                 continue;
             visited[u] = true;
+            if(cnt == n)
+                break;
+            cnt++;
             mstDistance += cur.distance;
             for (Edge next : graph.get(u)) {
                 int v = next.to;
