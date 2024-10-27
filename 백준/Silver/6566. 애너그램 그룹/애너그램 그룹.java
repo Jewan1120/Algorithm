@@ -1,62 +1,40 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        ArrayList<ArrayList<String>> words = new ArrayList<>();
-        ArrayList<int[]> chkList = new ArrayList<>();
+        HashMap<String, ArrayList<String>> hm = new HashMap<>();
         String str;
         while ((str = br.readLine()) != null) {
-            int[] chkArr = check(str);
-            boolean flg = false;
-            for (int i = 0; i < words.size(); i++) {
-                if (isPossible(chkArr, chkList.get(i))) {
-                    flg = true;
-                    words.get(i).add(str);
-                }
-            }
-            if (!flg) {
-                ArrayList<String> al = new ArrayList<>();
-                al.add(str);
-                words.add(al);
-                chkList.add(chkArr);
-            }
+            char[] cArr = str.toCharArray();
+            Arrays.sort(cArr);
+            String sortedStr = new String(cArr);
+            hm.putIfAbsent(sortedStr, new ArrayList<>());
+            hm.get(sortedStr).add(str);
         }
-        words.sort((o1, o2) -> o1.size() != o2.size() ? o2.size() - o1.size() : o1.get(0).compareTo(o2.get(0)));
+        ArrayList<String> al = new ArrayList<>(hm.keySet());
+        al.sort((o1, o2) -> hm.get(o1).size() != hm.get(o2).size() ? hm.get(o2).size() - hm.get(o1).size()
+                : hm.get(o1).get(0).compareTo(hm.get(o2).get(0)));
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < Math.min(5, words.size()); i++) {
-            ArrayList<String> al = words.get(i);
-            al.sort((o1, o2) -> o1.compareTo(o2));
-            sb.append("Group of size ").append(al.size()).append(": ");
+        for (int i = 0; i < Math.min(5, hm.size()); i++) {
+            ArrayList<String> words = hm.get(al.get(i));
+            words.sort((o1, o2) -> o1.compareTo(o2));
+            sb.append("Group of size ").append(words.size()).append(": ");
             HashSet<String> used = new HashSet<>();
-            for (String item : al) {
-                if (used.contains(item))
+            for (String word : words) {
+                if (used.contains(word))
                     continue;
-                used.add(item);
-                sb.append(item).append(" ");
+                used.add(word);
+                sb.append(word).append(" ");
             }
             sb.append(".\n");
         }
         System.out.println(sb);
-    }
-
-    private static int[] check(String str) {
-        int[] arr = new int[26];
-        for (int i = 0; i < str.length(); i++) {
-            int idx = str.charAt(i) - 'a';
-            arr[idx]++;
-        }
-        return arr;
-    }
-
-    private static boolean isPossible(int[] chkA, int[] chkB) {
-        for (int i = 0; i < 26; i++)
-            if (chkA[i] != chkB[i])
-                return false;
-        return true;
     }
 }
