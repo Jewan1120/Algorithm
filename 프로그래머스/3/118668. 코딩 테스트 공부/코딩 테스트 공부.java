@@ -1,3 +1,4 @@
+import java.util.Arrays;
 class Solution {
     public int solution(int alp, int cop, int[][] problems) {
         int maxAlp = alp, maxCop = cop;
@@ -6,14 +7,11 @@ class Solution {
             maxCop = Math.max(maxCop, problems[i][1]);
         }
         int[][] dp = new int[maxAlp + 1][maxCop + 1];
-        for (int i = 0; i <= maxAlp; i++) {
-            for (int j = 0; j <= maxCop; j++) {
-                dp[i][j] = Integer.MAX_VALUE;
-            }
-        }
+        for (int i = 0; i < maxAlp + 1; i++)
+            Arrays.fill(dp[i], Integer.MAX_VALUE >> 2);
         dp[alp][cop] = 0;
-        for (int i = alp; i <= maxAlp; i++) {
-            for (int j = cop; j <= maxCop; j++) {
+        for (int i = alp; i < maxAlp + 1; i++) {
+            for (int j = cop; j < maxCop + 1; j++) {
                 if (i < maxAlp)
                     dp[i + 1][j] = Math.min(dp[i + 1][j], dp[i][j] + 1);
                 if (j < maxCop)
