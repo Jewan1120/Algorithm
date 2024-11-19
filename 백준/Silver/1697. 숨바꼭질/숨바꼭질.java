@@ -1,46 +1,32 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.StringTokenizer;
 
 public class Main {
 
-    static class Node {
-
-        int time;
-        int cur;
-
-        public Node(int time, int cur) {
-            this.time = time;
-            this.cur = cur;
+    public static void main(String[] args) throws Exception {
+        int n = read(), k = read();
+        Deque<int[]> dq = new ArrayDeque<>();
+        boolean[] visited = new boolean[100_001];
+        dq.offer(new int[] { n, 0 });
+        while (!dq.isEmpty()) {
+            int[] cur = dq.poll();
+            if (cur[0] < 0 || cur[0] > 100_000 || visited[cur[0]])
+                continue;
+            visited[cur[0]] = true;
+            if (cur[0] == k) {
+                System.out.println(cur[1]);
+                return;
+            }
+            dq.offer(new int[] { cur[0] - 1, cur[1] + 1 });
+            dq.offer(new int[] { cur[0] + 1, cur[1] + 1 });
+            dq.offer(new int[] { cur[0] * 2, cur[1] + 1 });
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        boolean[] visited = new boolean[100_001];
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-        Deque<Node> dq = new ArrayDeque<>();
-        dq.add(new Node(0, N));
-        while (!dq.isEmpty()) {
-            Node node = dq.poll();
-            int cur = node.cur;
-            int time = node.time;
-            if (cur < 0 || 100_000 < cur || visited[cur])
-                continue;
-            visited[cur] = true;
-            if (cur == K) {
-                System.out.println(time);
-                break;
-            }
-            time++;
-            dq.add(new Node(time, cur - 1));
-            dq.add(new Node(time, cur + 1));
-            dq.add(new Node(time, cur * 2));
-        }
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        return n;
     }
 }
