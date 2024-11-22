@@ -10,6 +10,8 @@ public class Main {
         }
         int[] prime = new int[max + 1];
         for (int i = 2; i <= max; i++) {
+            if (prime[i] != 0)
+                continue;
             for (int j = i; j <= max; j += i) {
                 if (prime[j] == 0)
                     prime[j] = i;
