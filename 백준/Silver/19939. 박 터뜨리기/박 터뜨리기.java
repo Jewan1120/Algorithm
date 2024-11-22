@@ -9,9 +9,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
-        int need = 0;
-        for (int i = 1; i <= k; i++)
-            need += i;
+        int need = k * (k + 1) / 2;
         if (n < need) {
             System.out.println(-1);
             return;
