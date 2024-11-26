@@ -11,12 +11,14 @@ public class Main {
             arr[i] = read();
         int m = read();
         int[][] commands = new int[m][3];
-        for (int i = 0; i < m; i++)
-            commands[i] = new int[] { read(), read(), read() };
+        for (int i = 0; i < m; i++) {
+            int l = read(), r = read(), c = read();
+            commands[i] = new int[] { l, r, c };
+        }
         HashMap<Integer, Integer> hm = new HashMap<>();
-        hm.put(arrToInt(arr), 0);
         PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> hm.get(arrToInt(o1)) - hm.get(arrToInt(o2)));
-        pq.offer(arr.clone());
+        hm.put(arrToInt(arr), 0);
+        pq.offer(arr);
         while (!pq.isEmpty()) {
             int[] cur = pq.poll();
             int key = arrToInt(cur);
@@ -25,31 +27,32 @@ public class Main {
                 int nextKey = arrToInt(next);
                 if (hm.get(key) + command[2] < hm.getOrDefault(nextKey, Integer.MAX_VALUE)) {
                     hm.put(nextKey, hm.get(key) + command[2]);
-                    pq.add(next);
+                    pq.offer(next);
                 }
             }
         }
         Arrays.sort(arr);
-        int key = arrToInt(arr);
-        System.out.println(hm.getOrDefault(key, -1));
+        int answer = arrToInt(arr);
+        if (hm.containsKey(answer))
+            System.out.println(hm.get(answer));
+        else
+            System.out.println(-1);
     }
 
     private static int arrToInt(int[] arr) {
         int result = 0;
         for (int num : arr) {
             result *= 10;
-            if (num == 10)
-                result *= 10;
             result += num;
         }
         return result;
     }
 
-    private static int[] swap(int[] arr, int s, int e) {
+    private static int[] swap(int[] arr, int l, int r) {
         int[] result = arr.clone();
-        int temp = result[s - 1];
-        result[s - 1] = result[e - 1];
-        result[e - 1] = temp;
+        int temp = result[r - 1];
+        result[r - 1] = result[l - 1];
+        result[l - 1] = temp;
         return result;
     }
 
