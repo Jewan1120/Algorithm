@@ -1,52 +1,28 @@
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Queue;
-import java.util.ArrayDeque;
-import java.util.Arrays;
 class Solution {
+    
+    int n;
+    int len;
+    HashSet<Integer> hs = new HashSet<>();
+    
     public int solution(String[] user_id, String[] banned_id) {
-        int answer = 0;
-        ArrayList<HashSet<String>> bannedArr = new ArrayList<>(banned_id.length);
-        for (int i = 0; i < banned_id.length; i++) {
+        n = user_id.length;
+        len = banned_id.length;
+        for (int i = 0; i < len; i++)
             banned_id[i] = banned_id[i].replace("*", ".");
-            bannedArr.add(new HashSet<String>());
+        recursive(user_id, banned_id, 0, 0);
+        return hs.size();
+    }
+
+    private void recursive(String[] user_id, String[] banned_id, int depth, int visited) {
+        if (depth == len) {
+            hs.add(visited);
+            return;
         }
-        for (String user : user_id) {
-            for (int i = 0; i < banned_id.length; i++) {
-                if (user.matches(banned_id[i])) {
-                    bannedArr.get(i).add(user);
-                }
+        for (int i = 0; i < n; i++) {
+            if ((visited & (1 << i)) == 0 && user_id[i].matches(banned_id[depth])) {
+                recursive(user_id, banned_id, depth + 1, visited | (1 << i));
             }
         }
-        HashSet<String> usedSet = new HashSet<>();
-        Queue<HashSet<String>> usedQue = new ArrayDeque<>();
-        Queue<Integer> idxQue = new ArrayDeque<>();
-        usedQue.offer(new HashSet<String>());
-        idxQue.offer(0);
-        while (!usedQue.isEmpty()) {
-            HashSet<String> usedHs = usedQue.poll();
-            int idx = idxQue.poll();
-            if (idx == bannedArr.size()) {
-                String[] userArr = usedHs.toArray(new String[0]);
-                Arrays.sort(userArr);
-                String userStr = String.join("-", userArr);
-                if (!usedSet.contains(userStr)) {
-                    usedSet.add(userStr);
-                    answer++;
-                }
-                continue;
-            }
-            HashSet<String> bannedHs = bannedArr.get(idx);
-            for (String user : bannedHs) {
-                if (!usedHs.contains(user)) {
-                    HashSet<String> tmpHs = new HashSet<>();
-                    tmpHs.addAll(usedHs);
-                    tmpHs.add(user);
-                    usedQue.offer(tmpHs);
-                    idxQue.offer(idx + 1);
-                }
-            }
-        }
-        return answer;
     }
 }
