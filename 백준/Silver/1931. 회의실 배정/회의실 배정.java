@@ -1,31 +1,31 @@
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        StringTokenizer st;
+
+    public static void main(String[] args) throws Exception {
+        int n = read();
         int[][] arr = new int[n][2];
         for (int i = 0; i < n; i++) {
-            st = new StringTokenizer(br.readLine());
-            arr[i][0] = Integer.parseInt(st.nextToken());
-            arr[i][1] = Integer.parseInt(st.nextToken());
+            arr[i] = new int[] { read(), read() };
         }
-        br.close();
         Arrays.sort(arr, (o1, o2) -> o1[1] != o2[1] ? o1[1] - o2[1] : o1[0] - o2[0]);
-        int cnt = 0;
-        int e = 0;
+        int cnt = 0, e = 0;
         for (int i = 0; i < n; i++) {
             int s = arr[i][0];
-            if (e <= s) {
+            if (s >= e) {
                 cnt++;
                 e = arr[i][1];
             }
         }
         System.out.println(cnt);
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
+        return n;
     }
 }
