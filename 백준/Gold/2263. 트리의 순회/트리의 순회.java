@@ -1,13 +1,16 @@
 public class Main {
 
     static StringBuilder sb = new StringBuilder();
-    static int[] inOrder, postOrder;
+    static int[] inOrder, inOrderIdx, postOrder;
 
     public static void main(String[] args) throws Exception {
         int n = read();
         inOrder = new int[n];
-        for (int i = 0; i < n; i++)
+        inOrderIdx = new int[n + 1];
+        for (int i = 0; i < n; i++) {
             inOrder[i] = read();
+            inOrderIdx[inOrder[i]] = i;
+        }
         postOrder = new int[n];
         for (int i = 0; i < n; i++)
             postOrder[i] = read();
@@ -20,12 +23,7 @@ public class Main {
             return;
         int root = postOrder[pr];
         sb.append(root).append(" ");
-        int rootIdx = -1;
-        for (int i = il; i <= ir; i++)
-            if (inOrder[i] == root) {
-                rootIdx = i;
-                break;
-            }
+        int rootIdx = inOrderIdx[root];
         getPreOrder(il, rootIdx - 1, pl, pl + rootIdx - il - 1);
         getPreOrder(rootIdx + 1, ir, pl + rootIdx - il, pr - 1);
     }
