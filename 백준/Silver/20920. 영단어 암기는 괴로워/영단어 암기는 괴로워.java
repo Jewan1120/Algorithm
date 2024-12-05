@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 public class Main {
 
@@ -12,20 +12,20 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
         HashMap<String, Integer> hm = new HashMap<>();
+        ArrayList<String> al = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             String str = br.readLine();
-            if (str.length() >= m)
+            if (str.length() >= m) {
+                if (!hm.containsKey(str))
+                    al.add(str);
                 hm.put(str, hm.getOrDefault(str, 0) + 1);
+            }
         }
-        TreeSet<String> ts = new TreeSet<>((s1, s2) -> (hm.get(s1) != hm.get(s2) ? hm.get(s2) - hm.get(s1)
-                : s1.length() != s2.length() ? s2.length() - s1.length() : s1.compareTo(s2)));
-        for (String str : hm.keySet()) {
-            ts.add(str);
-        }
+        al.sort((o1, o2) -> hm.get(o1) != hm.get(o2) ? hm.get(o2) - hm.get(o1)
+                : o1.length() != o2.length() ? o2.length() - o1.length() : o1.compareTo(o2));
         StringBuilder sb = new StringBuilder();
-        for (String str : ts) {
+        for (String str : al)
             sb.append(str).append("\n");
-        }
         System.out.println(sb);
     }
 }
