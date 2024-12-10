@@ -6,45 +6,35 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
+        int t = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
         HashSet<Character> hs = new HashSet<>();
-        String[] strArr = new String[n];
-        for (int i = 0; i < n; i++) {
-            strArr[i] = br.readLine();
-        }
-        for (int i = 0; i < n; i++) {
-            String[] words = strArr[i].split(" ");
-            StringBuilder sb = new StringBuilder();
-            boolean flg = false;
-            for (int j = 0; j < words.length; j++) {
-                char c = Character.toLowerCase(words[j].charAt(0));
-                if (!hs.contains(c)) {
-                    hs.add(c);
-                    sb.append("[").append(words[j].charAt(0)).append("]").append(words[j].substring(1));
-                    words[j] = sb.toString();
-                    flg = true;
-                    break;
-                }
+        while (t-- > 0) {
+            String[] sArr = br.readLine().split(" ");
+            boolean find = false;
+            for (int i = 0; i < sArr.length; i++) {
+                char c = sArr[i].charAt(0);
+                if (hs.contains(Character.toUpperCase(c)) || hs.contains(Character.toLowerCase(c)))
+                    continue;
+                sArr[i] = sArr[i].replaceFirst(String.valueOf(c), "[" + c + "]");
+                hs.add(c);
+                find = true;
+                break;
             }
-            if (!flg) {
-                loop: for (int j = 0; j < words.length; j++) {
-                    for (int k = 0; k < words[j].length(); k++) {
-                        char c = Character.toLowerCase(words[j].charAt(k));
-                        if (!hs.contains(c)) {
-                            hs.add(c);
-                            sb.append(words[j].substring(0, k)).append("[").append(words[j].charAt(k))
-                                    .append("]").append(words[j].substring(k + 1));
-                            words[j] = sb.toString();
-                            flg = true;
-                            break loop;
-                        }
+            if (!find)
+                next: for (int i = 0; i < sArr.length; i++) {
+                    for (char c : sArr[i].toCharArray()) {
+                        if (c == ' ' || hs.contains(Character.toUpperCase(c)) || hs.contains(Character.toLowerCase(c)))
+                            continue;
+                        sArr[i] = sArr[i].replaceFirst(String.valueOf(c), "[" + c + "]");
+                        hs.add(c);
+                        break next;
                     }
                 }
-            }
-            strArr[i] = String.join(" ", words);
+            for (String str : sArr)
+                sb.append(str).append(" ");
+            sb.append("\n");
         }
-        for (String str : strArr) {
-            System.out.println(str);
-        }
+        System.out.println(sb);
     }
 }
