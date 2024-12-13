@@ -2,12 +2,12 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         int n = read(), k = read();
-        int[] arr = new int[n];
+        long[] arr = new long[n];
         for (int i = 0; i < n; i++)
             arr[i] = read();
-        int[] dp = new int[n + 1];
+        long[] dp = new long[n + 1];
         int l = 0, r = 0;
-        int sum = 0;
+        long sum = 0;
         while (r < n) {
             sum += arr[r];
             dp[r + 1] = dp[r];
