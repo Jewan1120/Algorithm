@@ -13,7 +13,10 @@ public class Main {
         String str1 = "", str2 = "";
         for (int i = 0; i < n - 1; i++)
             for (int j = i + 1; j < n; j++) {
-                int len = getPrefixLen(arr[i], arr[j]);
+                int limit = Math.min(arr[i].length(), arr[j].length());
+                if (limit < maxlen)
+                    continue;
+                int len = getPrefixLen(arr[i], arr[j], limit);
                 if (len > maxlen) {
                     maxlen = len;
                     str1 = arr[i];
@@ -24,9 +27,8 @@ public class Main {
         System.out.println(str2);
     }
 
-    private static int getPrefixLen(String str1, String str2) {
+    private static int getPrefixLen(String str1, String str2, int limit) {
         int len = 0;
-        int limit = Math.min(str1.length(), str2.length());
         while (len < limit && str1.charAt(len) == str2.charAt(len))
             len++;
         return len;
