@@ -1,32 +1,28 @@
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class Main {
 
+    static StringBuilder sb = new StringBuilder();
+
     public static void main(String[] args) throws Exception {
-        int n;
-        StringBuilder sb = new StringBuilder();
-        while ((n = read()) < 13) {
-            int len = (int) Math.pow(3, n);
-            char[] arr = new char[len];
-            Arrays.fill(arr, ' ');
-            cantor(arr, 0, len);
-            sb.append(arr).append("\n");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str;
+        while ((str = br.readLine()) != null) {
+            int n = Integer.parseInt(str);
+            recursive(n);
+            sb.append("\n");
         }
         System.out.println(sb);
     }
 
-    private static void cantor(char[] arr, int l, int r) {
-        if (r - l == 1) {
-            arr[l] = '-';
+    private static void recursive(int depth) {
+        if (depth == 0) {
+            sb.append("-");
             return;
         }
-        cantor(arr, l, l + ((r - l) / 3));
-        cantor(arr, l + (2 * (r - l) / 3), r);
-    }
-
-    private static int read() throws Exception {
-        int c, n = System.in.read() & 15;
-        while ((c = System.in.read()) >= 48)
-            n = (n << 3) + (n << 1) + (c & 15);
-        return n;
+        recursive(depth - 1);
+        sb.append(" ".repeat((int) Math.pow(3, depth - 1)));
+        recursive(depth - 1);
     }
 }
