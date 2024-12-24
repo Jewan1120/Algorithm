@@ -1,41 +1,38 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+
 public class Main {
 
-    static char[][] cArr;
+    static char[][] board;
 
     public static void main(String[] args) throws Exception {
-        int n = read();
-        cArr = new char[n][n * 2 - 1];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(cArr[i], ' ');
-            for (int j = 0; j < i * 2 + 1; j++) {
-                cArr[i][n - (i + 1) + j] = '*';
-            }
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        board = new char[n][2 * n - 1];
+        for (int i = 0; i < n; i++)
+            Arrays.fill(board[i], ' ');
+        int k = 0;
+        while (n > 3 * 1 << k) {
+            k++;
         }
-        recursive(0, n - 1, n);
+        recursive(k, 0, n - 1);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++)
-            sb.append(String.valueOf(cArr[i])).append("\n");
+            sb.append(new String(board[i])).append("\n");
         System.out.println(sb);
     }
 
-    private static void recursive(int y, int x, int p) {
-        if (p == 0)
+    private static void recursive(int depth, int y, int x) {
+        if (depth == 0) {
+            board[y][x] = '*';
+            board[y + 1][x - 1] = board[y + 1][x + 1] = '*';
+            board[y + 2][x - 2] = board[y + 2][x - 1] = board[y + 2][x] = board[y + 2][x + 1] = board[y + 2][x + 2] = '*';
             return;
-        int d = p / 2;
-        for (int i = 0; i < d; i++)
-            for (int j = 0; j < ((d - i) * 2) - 1; j++) {
-                cArr[y + d + i][x - d + j + i + 1] = ' ';
-            }
-        recursive(y, x, d);
-        recursive(y + d, x - d, d);
-        recursive(y + d, x + d, d);
-    }
-
-    private static int read() throws Exception {
-        int c, n = System.in.read() & 15;
-        while ((c = System.in.read()) >= 48)
-            n = (n << 3) + (n << 1) + (c & 15);
-        return n;
+        }
+        int d = 3 * (int) Math.pow(2, depth - 1);
+        recursive(depth - 1, y, x);
+        recursive(depth - 1, y + d, x - d);
+        recursive(depth - 1, y + d, x + d);
     }
 }
