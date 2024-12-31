@@ -10,34 +10,34 @@ public class Main {
                 ts.add(i);
                 ts.add(i + n);
             }
-        int now = 1;
         StringBuilder sb = new StringBuilder();
+        int now = 1;
         while (q-- > 0) {
             int oper = read();
-            int x = 0;
+            int p;
             switch (oper) {
             case 1:
-                x = read();
-                if (ts.contains(x)) {
-                    ts.remove(x);
-                    ts.remove(x + n);
+                p = read();
+                if (ts.contains(p)) {
+                    ts.remove(p);
+                    ts.remove(p + n);
                 } else {
-                    ts.add(x);
-                    ts.add(x + n);
+                    ts.add(p);
+                    ts.add(p + n);
                 }
                 break;
             case 2:
-                x = read() % n;
-                now += x;
+                p = read() % n;
+                now += p;
                 if (now > n)
                     now %= n;
                 break;
             case 3:
                 if (ts.isEmpty())
                     sb.append("-1\n");
-                else if (ts.contains(now))
+                else if (ts.contains(now)) {
                     sb.append("0\n");
-                else
+                } else
                     sb.append(ts.higher(now) - now).append("\n");
                 break;
             }
