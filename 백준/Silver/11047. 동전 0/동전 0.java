@@ -1,28 +1,28 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.util.PriorityQueue;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-        int[] arr = new int[N];
-        for (; N > 0; N--) {
-            arr[N - 1] = Integer.parseInt(br.readLine());
+
+    public static void main(String[] args) throws Exception {
+        int n = read(), k = read();
+        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        for (int i = 0; i < n; i++)
+            pq.offer(read());
+        int total = 0;
+        while (k > 0) {
+            int unit = pq.poll();
+            int cnt = k / unit;
+            total += cnt;
+            k -= unit * cnt;
         }
-        int p = 0;
-        int coins = 0;
-        while (K > 0) {
-            if (arr[p] <= K) {
-                int cnt = K / arr[p];
-                K -= cnt * arr[p];
-                coins += cnt;
-            }
-            p++;
-        }
-        System.out.println(coins);
+        System.out.println(total);
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
+        return n;
     }
 }
