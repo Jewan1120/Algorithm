@@ -1,4 +1,5 @@
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
 
@@ -7,16 +8,16 @@ public class Main {
         int[] arr = new int[n];
         for (int i = 0; i < n; i++)
             arr[i] = read();
-        Stack<Integer> stk = new Stack<>();
-        int[] result = new int[n];
+        Deque<Integer> dq = new ArrayDeque<>();
+        int[] answer = new int[n];
         for (int i = n - 1; i >= 0; i--) {
-            while (!stk.isEmpty() && stk.peek() <= arr[i])
-                stk.pop();
-            result[i] = stk.isEmpty() ? -1 : stk.peek();
-            stk.push(arr[i]);
+            while (!dq.isEmpty() && dq.peekLast() <= arr[i])
+                dq.pollLast();
+            answer[i] = dq.isEmpty() ? -1 : dq.peekLast();
+            dq.offerLast(arr[i]);
         }
         StringBuilder sb = new StringBuilder();
-        for (int i : result)
+        for (int i : answer)
             sb.append(i).append(" ");
         System.out.println(sb);
     }
@@ -25,6 +26,8 @@ public class Main {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
         return n;
     }
 }
