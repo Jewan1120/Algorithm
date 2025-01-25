@@ -1,18 +1,18 @@
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        int n = read(), m = read(), max = Integer.MIN_VALUE;
+        int n = read(), m = read();
         int[][] dp = new int[n + 1][m + 1];
         for (int i = 1; i < n + 1; i++)
             for (int j = 1; j < m + 1; j++)
                 dp[i][j] = read() + dp[i - 1][j] + dp[i][j - 1] - dp[i - 1][j - 1];
-        for (int i = 1; i < n + 1; i++)
-            for (int j = 1; j < m + 1; j++)
-                for (int k = 1; k < i + 1; k++)
-                    for (int l = 1; l < j + 1; l++) {
-                        max = Math.max(max, dp[i][j] - dp[k - 1][j] - dp[i][l - 1] + dp[k - 1][l - 1]);
-                    }
-        System.out.println(max);
+        int maxValue = Integer.MIN_VALUE;
+        for (int y = 1; y < n + 1; y++)
+            for (int x = 1; x < m + 1; x++)
+                for (int ny = 0; ny < y; ny++)
+                    for (int nx = 0; nx < x; nx++)
+                        maxValue = Math.max(maxValue, dp[y][x] - dp[ny][x] - dp[y][nx] + dp[ny][nx]);
+        System.out.println(maxValue);
     }
 
     private static int read() throws Exception {
