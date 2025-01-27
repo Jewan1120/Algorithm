@@ -2,19 +2,19 @@ import java.util.ArrayList;
 
 public class Main {
 
-    static ArrayList<ArrayList<int[]>> graph = new ArrayList<>();
+    static int n;
+    static ArrayList<ArrayList<int[]>> tree = new ArrayList<>();
     static boolean[] visited;
-    static int maxNode;
-    static int maxWeight;
+    static int maxNode = 0, maxWeight = 0;
 
     public static void main(String[] args) throws Exception {
-        int n = read();
+        n = read();
         for (int i = 0; i < n + 1; i++)
-            graph.add(new ArrayList<>());
+            tree.add(new ArrayList<>());
         for (int i = 0; i < n - 1; i++) {
             int u = read(), v = read(), w = read();
-            graph.get(u).add(new int[] { v, w });
-            graph.get(v).add(new int[] { u, w });
+            tree.get(u).add(new int[] { v, w });
+            tree.get(v).add(new int[] { u, w });
         }
         visited = new boolean[n + 1];
         dfs(1, 0);
@@ -24,15 +24,15 @@ public class Main {
     }
 
     private static void dfs(int node, int weight) {
-        visited[node] = true;
         if (weight > maxWeight) {
-            maxWeight = weight;
             maxNode = node;
+            maxWeight = weight;
         }
-        for (int[] edge : graph.get(node)) {
-            if (!visited[edge[0]]) {
-                dfs(edge[0], weight + edge[1]);
-            }
+        visited[node] = true;
+        for (int[] edge : tree.get(node)) {
+            if (visited[edge[0]])
+                continue;
+            dfs(edge[0], weight + edge[1]);
         }
     }
 
