@@ -14,20 +14,22 @@ public class Main {
         }
         while (l <= r) {
             int target = (l + r) / 2;
-            if (isPossible(target)) {
+            if (isPossible(target))
                 l = target + 1;
-            } else {
+            else
                 r = target - 1;
-            }
         }
         System.out.println(r);
     }
 
     private static boolean isPossible(int target) {
         long sum = 0;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++) {
             sum += Math.max(0, arr[i] - target);
-        return sum >= m;
+            if (sum >= m)
+                return true;
+        }
+        return false;
     }
 
     private static int read() throws Exception {
