@@ -6,11 +6,10 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    static int n, m;
-    static int[] dy = { 1, -1, 0, 0 };
-    static int[] dx = { 0, 0, 1, -1 };
-    static boolean[][] board;
-    static int goal;
+    static int n, m, g;
+    static boolean[][] board, visited;
+    static int[] moveArr;
+    static int[] dy = { -1, 1, 0, 0 }, dx = { 0, 0, -1, 1 };
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,97 +17,90 @@ public class Main {
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
         board = new boolean[n][m];
-        boolean[][] visited = new boolean[n * m][n * m];
-        int sR = 0, sB = 0;
+        visited = new boolean[n * m][n * m];
+        int r = 0, b = 0;
         for (int i = 0; i < n; i++) {
-            String line = br.readLine();
+            char[] line = br.readLine().toCharArray();
             for (int j = 0; j < m; j++) {
-                char c = line.charAt(j);
-                int idx = i * m + j;
+                char c = line[j];
                 if (c == '#')
                     board[i][j] = true;
                 else if (c == 'R')
-                    sR = idx;
+                    r = i * m + j;
                 else if (c == 'B')
-                    sB = idx;
+                    b = i * m + j;
                 else if (c == 'O')
-                    goal = idx;
+                    g = i * m + j;
             }
         }
+        System.out.println(bfs(r, b));
+    }
+
+    private static int bfs(int sr, int sb) {
         Deque<int[]> dq = new ArrayDeque<>();
-        dq.offer(new int[] { sR, sB });
-        visited[sR][sB] = true;
-        visited[goal][goal] = true;
+        dq.offer(new int[] { sr, sb });
+        visited[sr][sb] = true;
         int time = 0;
-        while (time <= 10) {
-            int size = dq.size();
-            while (size-- > 0) {
+        while (!dq.isEmpty()) {
+            int t = dq.size();
+            while (t-- > 0) {
                 int[] cur = dq.poll();
-                int R = cur[0], B = cur[1];
-                if (B == goal)
+                int r = cur[0], b = cur[1];
+                if (b == g)
                     continue;
-                if (R == goal) {
-                    System.out.println(time);
-                    return;
-                }
-                for (int dir = 0; dir < 4; dir++) {
-                    int[] next = { move(R, dir), move(B, dir) };
-                    if (!visited[next[0]][next[1]]) {
-                        if (next[0] == next[1]) {
-                            next = adjust(cur, next, dir);
-                        }
-                        dq.offer(next);
-                        visited[next[0]][next[1]] = true;
-                    }
+                if (r == g)
+                    return time;
+                for (int i = 0; i < 4; i++) {
+                    int[] next = move(i, r, b);
+                    if ((next[0] == -1 && next[1] == -1) || visited[next[0]][next[1]])
+                        continue;
+                    visited[next[0]][next[1]] = true;
+                    dq.offer(next);
                 }
             }
             time++;
+            if(time > 10)
+                return -1;
         }
-        System.out.println(-1);
+        return -1;
     }
 
-    private static int move(int ball, int dir) {
-        int p = 0;
-        int y = ball / m, x = ball % m;
-        while (!board[y + dy[dir] * (p + 1)][x + dx[dir] * (p + 1)]) {
-            p++;
-            if (goal == (y + dy[dir] * p) * m + (x + dx[dir] * p))
+    private static int[] move(int dir, int r, int b) {
+        int nr = goStraight(dir, r), nb = goStraight(dir, b);
+        if (nr == nb) {
+            if (nr == g)
+                return new int[] { -1, -1 };
+            switch (dir) {
+            case 0:
+                if (r < b) nb += m;
+                else nr += m;
                 break;
+            case 1:
+                if (r < b) nr -= m;
+                else nb -= m;
+                break;
+            case 2:
+                if (r < b) nb += 1;
+                else nr += 1;
+                break;
+            case 3:
+                if (r < b) nr -= 1;
+                else nb -= 1;
+                break;
+            }
         }
-        return (y + dy[dir] * p) * m + (x + dx[dir] * p);
+        return new int[] { nr, nb };
     }
 
-    private static int[] adjust(int[] prev, int[] next, int dir) {
-        int R = prev[0], B = prev[1];
-        int yR = R / m, xR = R % m;
-        int yB = B / m, xB = B % m;
-        int nR = next[0], nB = next[1];
-        switch (dir) {
-        case 0:
-            if (yR < yB)
-                nR -= m;
-            else
-                nB -= m;
-            break;
-        case 1:
-            if (yR > yB)
-                nR += m;
-            else
-                nB += m;
-            break;
-        case 2:
-            if (xR < xB)
-                nR -= 1;
-            else
-                nB -= 1;
-            break;
-        case 3:
-            if (xR > xB)
-                nR += 1;
-            else
-                nB += 1;
-            break;
+    private static int goStraight(int dir, int cur) {
+        int y = cur / m, x = cur % m;
+        int gy = g / m, gx = g % m;
+        while (!board[y + dy[dir]][x + dx[dir]]) {
+            y += dy[dir];
+            x += dx[dir];
+            if (y == gy && x == gx)
+                return y * m + x;
         }
-        return new int[] { nR, nB };
+        return y * m + x;
     }
 }
