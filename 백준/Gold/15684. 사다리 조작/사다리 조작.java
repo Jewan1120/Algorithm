@@ -1,64 +1,78 @@
 public class Main {
 
-    static int n, m, h;
-    static boolean[][] ladders;
+    static int n, m, h, maxDepth;
+    static int[] ladders, needs;
 
     public static void main(String[] args) throws Exception {
         n = read();
         m = read();
         h = read();
-        ladders = new boolean[h][n - 1];
+        ladders = new int[h];
+        needs = new int[n];
         for (int i = 0; i < m; i++) {
-            int y = read(), x = read();
-            ladders[y - 1][x - 1] = true;
+            int a = read() - 1, b = read() - 1;
+            ladders[a] |= 1 << b;
+            needs[b]++;
+            needs[b + 1]++;
         }
-        for (int i = 0; i <= 3; i++) {
-            if (placeLadder(0, i)) {
-                System.out.println(i);
-                return;
+        if (isValid())
+            for (int i = 0; i < 4; i++) {
+                maxDepth = i;
+                if (recursive(0, 0)) {
+                    System.out.println(i);
+                    return;
+                }
             }
-        }
         System.out.println(-1);
     }
 
-    private static boolean placeLadder(int depth, int cnt) {
-        if (depth == cnt)
-            return simulate();
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < n - 1; j++) {
-                if (isPossible(i, j)) {
-                    ladders[i][j] = true;
-                    if (placeLadder(depth + 1, cnt))
-                        return true;
-                    ladders[i][j] = false;
-                }
+    private static boolean recursive(int depth, int p) {
+        if (depth == maxDepth)
+            return isPossible();
+        for (int i = p; i < h * (n - 1); i++) {
+            int r = i / (n - 1), c = i % (n - 1);
+            if (canPlace(ladders[r], c)) {
+                ladders[r] |= 1 << c;
+                if (recursive(depth + 1, i + 1))
+                    return true;
+                ladders[r] &= ~(1 << c);
             }
         }
         return false;
     }
 
-    private static boolean isPossible(int y, int x) {
-        if (ladders[y][x])
+    private static boolean canPlace(int ladder, int p) {
+        if ((ladder & (1 << p)) != 0)
             return false;
-        if ((x - 1 >= 0 && ladders[y][x - 1]) || (x + 1 < n - 1 && ladders[y][x + 1]))
+        if (p > 0 && (ladder & (1 << (p - 1))) != 0)
+            return false;
+        if (p < n - 1 && (ladder & (1 << (p + 1))) != 0)
             return false;
         return true;
     }
 
-    private static boolean simulate() {
-        for (int i = 0; i < n - 1; i++) {
-            int num = i;
+    private static boolean isPossible() {
+        for (int i = 0; i < n; i++) {
+            int now = i;
             for (int j = 0; j < h; j++) {
-                int left = num - 1, right = num;
-                if (left >= 0 && ladders[j][left])
-                    num--;
-                if (right < n - 1 && ladders[j][right])
-                    num++;
+                if (now > 0 && (ladders[j] & (1 << (now - 1))) != 0)
+                    now--;
+                else if (now < n - 1 && (ladders[j] & (1 << now)) != 0)
+                    now++;
             }
-            if (num != i)
+            if (now != i)
                 return false;
         }
         return true;
+    }
+
+    private static boolean isValid() {
+        int oddCount = 0;
+        for (int i = 0; i < n; i++) {
+            if (needs[i] % 2 != 0)
+                oddCount++;
+        }
+        return oddCount / 2 < 4;
     }
 
     private static int read() throws Exception {
