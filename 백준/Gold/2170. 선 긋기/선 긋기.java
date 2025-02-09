@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import java.util.PriorityQueue;
 
 public class Main {
 
@@ -9,23 +8,18 @@ public class Main {
         for (int i = 0; i < n; i++)
             arr[i] = new int[] { read(), read() };
         Arrays.sort(arr, (o1, o2) -> o1[0] - o2[0]);
-        PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> o1[0] - o2[0]);
-        int totalLen = 0, lastPos = Integer.MIN_VALUE;
-        for (int i = 0; i < n; i++) {
-            if (pq.isEmpty()) {
-                pq.offer(arr[i]);
+        int totalLen = 0, sPos = arr[0][0], ePos = arr[0][1];
+        for (int i = 1; i < n; i++) {
+            if (arr[i][0] <= ePos) {
+                sPos = Math.min(sPos, arr[i][0]);
+                ePos = Math.max(ePos, arr[i][1]);
             } else {
-                if (arr[i][0] <= lastPos) {
-                    pq.offer(arr[i]);
-                } else {
-                    totalLen += lastPos - pq.peek()[0];
-                    pq.clear();
-                    pq.offer(arr[i]);
-                }
+                totalLen += ePos - sPos;
+                sPos = arr[i][0];
+                ePos = arr[i][1];
             }
-            lastPos = Math.max(lastPos, arr[i][1]);
         }
-        totalLen += lastPos - pq.peek()[0];
+        totalLen += ePos - sPos;
         System.out.println(totalLen);
     }
 
