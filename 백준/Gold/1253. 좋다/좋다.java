@@ -11,22 +11,22 @@ public class Main {
         int total = 0;
         for (int i = 0; i < n; i++) {
             int l = 0, r = n - 1;
-            if (r == i)
-                r--;
-            if (l == i)
-                l++;
             while (l < r) {
+                if (r == i) {
+                    r--;
+                    continue;
+                }
+                if (l == i) {
+                    l++;
+                    continue;
+                }
                 if (arr[l] + arr[r] == arr[i]) {
                     total++;
                     break;
                 } else if (arr[l] + arr[r] > arr[i]) {
                     r--;
-                    if (r == i)
-                        r--;
                 } else {
                     l++;
-                    if (l == i)
-                        l++;
                 }
             }
         }
