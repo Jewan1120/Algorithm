@@ -20,40 +20,28 @@ public class Main {
             }
         Arrays.sort(AB);
         Arrays.sort(CD);
-        long total = 0;
-        for (int i = 0; i < n * n; i++) {
-            int target = -AB[i];
-            int lower = lowerBound(CD, target);
-            int upper = upperBound(CD, target);
-            total += upper - lower;
-        }
-        System.out.println(total);
-    }
-
-    private static int lowerBound(int[] arr, int target) {
-        int left = 0, right = arr.length;
-        while (left < right) {
-            int mid = (left + right) / 2;
-            if (arr[mid] >= target) {
-                right = mid;
-            } else {
-                left = mid + 1;
+        int l = 0, r = n * n - 1;
+        long cnt = 0;
+        while (0 <= r && l < n * n) {
+            if (AB[l] + CD[r] < 0)
+                l++;
+            else if (AB[l] + CD[r] > 0)
+                r--;
+            else {
+                int lc = 1, rc = 1;
+                while (l < n * n - 1 && AB[l] == AB[l + 1]) {
+                    l++;
+                    lc++;
+                }
+                while (0 < r && CD[r] == CD[r - 1]) {
+                    r--;
+                    rc++;
+                }
+                cnt += (long) lc * rc;
+                l++;
             }
         }
-        return left;
-    }
-
-    private static int upperBound(int[] arr, int target) {
-        int left = 0, right = arr.length;
-        while (left < right) {
-            int mid = (left + right) / 2;
-            if (arr[mid] > target) {
-                right = mid;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return left;
+        System.out.println(cnt);
     }
 
     private static int read() throws Exception {
@@ -63,6 +51,8 @@ public class Main {
             n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
         return m ? ~n + 1 : n;
     }
 }
