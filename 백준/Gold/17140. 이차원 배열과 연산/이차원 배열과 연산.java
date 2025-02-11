@@ -22,70 +22,45 @@ public class Main {
                 System.out.println(time);
                 return;
             }
-            if (bR >= bC)
-                board = sortR(board);
-            else
-                board = sortC(board);
+            board = (bR >= bC) ? sort(board, true) : sort(board, false);
             time++;
         }
         System.out.println(-1);
     }
 
-    private static int[][] sortR(int[][] board) {
+    private static int[][] sort(int[][] board, boolean isRow) {
         HashMap<Integer, Integer> hm;
-        bC = 0;
         int[][] nextBoard = new int[MAX_LEN][MAX_LEN];
-        for (int i = 0; i < bR; i++) {
+        int maxLen = 0;
+        for (int i = 0; i < (isRow ? bR : bC); i++) {
             hm = new HashMap<>();
-            for (int j = 0; j < bR; j++) {
-                if (board[i][j] == 0)
+            for (int j = 0; j < (isRow ? bC : bR); j++) {
+                int value = isRow ? board[i][j] : board[j][i];
+                if (value == 0)
                     continue;
-                hm.putIfAbsent(board[i][j], 0);
-                hm.replace(board[i][j], hm.get(board[i][j]) + 1);
+                hm.put(value, hm.getOrDefault(value, 0) + 1);
             }
             PriorityQueue<int[]> pq = new PriorityQueue<int[]>(
                     (o1, o2) -> o1[1] != o2[1] ? o1[1] - o2[1] : o1[0] - o2[0]);
             for (int key : hm.keySet())
                 pq.offer(new int[] { key, hm.get(key) });
             int idx = 0;
-            while (!pq.isEmpty()) {
-                if (idx == 50)
-                    break;
-                int[] set = pq.poll();
-                nextBoard[i][idx++] = set[0];
-                nextBoard[i][idx++] = set[1];
-                bC = Math.max(bC, idx);
+            while (!pq.isEmpty() && idx < 50) {
+                int[] pair = pq.poll();
+                if (isRow) {
+                    nextBoard[i][idx++] = pair[0];
+                    nextBoard[i][idx++] = pair[1];
+                } else {
+                    nextBoard[idx++][i] = pair[0];
+                    nextBoard[idx++][i] = pair[1];
+                }
+                maxLen = Math.max(maxLen, idx);
             }
         }
-        return nextBoard;
-    }
-
-    private static int[][] sortC(int[][] board) {
-        HashMap<Integer, Integer> hm;
-        bR = 0;
-        int[][] nextBoard = new int[MAX_LEN][MAX_LEN];
-        for (int i = 0; i < MAX_LEN; i++) {
-            hm = new HashMap<>();
-            for (int j = 0; j < MAX_LEN; j++) {
-                if (board[j][i] == 0)
-                    continue;
-                hm.putIfAbsent(board[j][i], 0);
-                hm.replace(board[j][i], hm.get(board[j][i]) + 1);
-            }
-            PriorityQueue<int[]> pq = new PriorityQueue<int[]>(
-                    (o1, o2) -> o1[1] != o2[1] ? o1[1] - o2[1] : o1[0] - o2[0]);
-            for (int key : hm.keySet())
-                pq.offer(new int[] { key, hm.get(key) });
-            int idx = 0;
-            while (!pq.isEmpty()) {
-                if (idx == 50)
-                    break;
-                int[] set = pq.poll();
-                nextBoard[idx++][i] = set[0];
-                nextBoard[idx++][i] = set[1];
-                bR = Math.max(bR, idx);
-            }
-        }
+        if (isRow)
+            bC = maxLen;
+        else
+            bR = maxLen;
         return nextBoard;
     }
 
