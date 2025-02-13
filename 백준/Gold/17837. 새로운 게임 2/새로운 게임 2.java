@@ -40,8 +40,7 @@ public class Main {
                     if (!isValid(ny, nx) || board[ny][nx] == 2)
                         continue;
                 }
-                move(i, y, x, ny, nx);
-                if (dqs.get(ny).get(nx).size() >= 4) {
+                if (move(i, y, x, ny, nx)) {
                     System.out.println(time);
                     return;
                 }
@@ -58,7 +57,7 @@ public class Main {
             locations[idx][2]--;
     }
 
-    private static void move(int idx, int y, int x, int ny, int nx) {
+    private static boolean move(int idx, int y, int x, int ny, int nx) {
         Deque<Integer> dq = dqs.get(y).get(x);
         Deque<Integer> temp = new ArrayDeque<>();
         while (!dq.isEmpty() && dq.peekLast() != idx)
@@ -71,7 +70,10 @@ public class Main {
             locations[next][0] = ny;
             locations[next][1] = nx;
             nDq.offerLast(next);
+            if (nDq.size() >= 4)
+                return true;
         }
+        return false;
     }
 
     private static boolean isValid(int y, int x) {
