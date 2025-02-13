@@ -2,44 +2,50 @@ import java.util.ArrayList;
 
 public class Main {
 
-    static int n, m, min = Integer.MAX_VALUE;
-    static ArrayList<int[]> homes = new ArrayList<>(), chickens = new ArrayList<>();
-    static int[] result;
+    static int n, m, minDistance = Integer.MAX_VALUE;
+    static ArrayList<int[]> pArr = new ArrayList<>();
+    static ArrayList<int[]> hArr = new ArrayList<>();
+    static int[][] distances;
+    static int[] choices;
 
     public static void main(String[] args) throws Exception {
         n = read();
         m = read();
-        result = new int[m];
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++) {
                 int p = read();
-                if (p == 1) {
-                    homes.add(new int[] {i, j});
-                } else if (p == 2)
-                    chickens.add(new int[] {i, j});
+                if (p == 1)
+                    pArr.add(new int[] { i, j });
+                else if (p == 2)
+                    hArr.add(new int[] { i, j });
             }
-        findChickenLoad(0, 0);
-        System.out.println(min);
+        distances = new int[pArr.size()][hArr.size()];
+        for (int i = 0; i < pArr.size(); i++)
+            for (int j = 0; j < hArr.size(); j++) {
+                int py = pArr.get(i)[0], px = pArr.get(i)[1];
+                int hy = hArr.get(j)[0], hx = hArr.get(j)[1];
+                distances[i][j] = Math.abs(py - hy) + Math.abs(px - hx);
+            }
+        choices = new int[m];
+        recursive(0, 0);
+        System.out.println(minDistance);
     }
 
-    private static void findChickenLoad(int depth, int p) {
+    private static void recursive(int depth, int p) {
         if (depth == m) {
-            int chickenLoad = 0;
-            for (int i = 0; i < homes.size(); i++) {
-                int len = Integer.MAX_VALUE;
-                int[] h = homes.get(i);
-                for (int j = 0; j < m; j++) {
-                    int[] c = chickens.get(result[j]);
-                    len = Math.min(len, Math.abs(c[0] - h[0]) + Math.abs(c[1] - h[1]));
-                }
-                chickenLoad += len;
+            int totalDistance = 0;
+            for (int i = 0; i < pArr.size(); i++) {
+                int distance = Integer.MAX_VALUE;
+                for (int j = 0; j < m; j++)
+                    distance = Math.min(distance, distances[i][choices[j]]);
+                totalDistance += distance;
             }
-            min = Math.min(min, chickenLoad);
+            minDistance = Math.min(minDistance, totalDistance);
             return;
         }
-        for (int i = p; i < chickens.size(); i++) {
-            result[depth] = i;
-            findChickenLoad(depth + 1, i + 1);
+        for (int i = p; i < hArr.size(); i++) {
+            choices[depth] = i;
+            recursive(depth + 1, i + 1);
         }
     }
 
@@ -47,6 +53,8 @@ public class Main {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
         return n;
     }
 }
