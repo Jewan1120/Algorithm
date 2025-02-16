@@ -1,4 +1,4 @@
-# [level Lv.5] 상품을 구매한 회원 비율 구하기 - 131534 
+# [level 5] 상품을 구매한 회원 비율 구하기 - 131534 
 
 [문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131534) 
 
@@ -16,7 +16,7 @@ Empty
 
 ### 제출 일자
 
-2024년 1월 0일 19:3:52
+2025년 02월 16일 18:52:51
 
 ### 문제 설명
 
@@ -252,7 +252,7 @@ Empty
         <thead><tr>
 <th>YEAR</th>
 <th>MONTH</th>
-<th>PUCHASED_USERS</th>
+<th>PURCHASED_USERS</th>
 <th>PUCHASED_RATIO</th>
 </tr>
 </thead>
