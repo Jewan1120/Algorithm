@@ -1,7 +1,6 @@
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Main {
@@ -24,11 +23,10 @@ public class Main {
     }
 
     static int n, m, k;
-    static int[][] scentBoard;
+    static int[][][] scentBoard;
     static boolean[][] visited;
     static Deque<Shark> sharks = new ArrayDeque<>();
-    static LinkedList<int[]> scentList = new LinkedList<>();
-    static Deque<int[]> scentDeque = new ArrayDeque<>();
+    static Deque<int[]> scentDeque = new LinkedList<>();
 
     static int[] dy = { 0, -1, 1, 0, 0 }, dx = { 0, 0, 0, -1, 1 };
 
@@ -36,7 +34,7 @@ public class Main {
         n = read();
         m = read();
         k = read();
-        scentBoard = new int[n][n];
+        scentBoard = new int[2][n][n];
         visited = new boolean[n][n];
         init();
         int time = 0;
@@ -76,8 +74,8 @@ public class Main {
                 int num = read();
                 if (num != 0) {
                     tempSharks[num] = new int[] { i, j };
-                    scentList.add(new int[] { i, j, num, k });
-                    scentBoard[i][j] = num;
+                    scentBoard[0][i][j] = num;
+                    scentBoard[1][i][j] = k;
                 }
             }
         int[] tempDir = new int[m + 1];
@@ -101,9 +99,9 @@ public class Main {
             int dir = priority[i];
             int ny = shark.y + dy[dir], nx = shark.x + dx[dir];
             if (isValid(ny, nx)) {
-                if (scentBoard[ny][nx] == 0)
+                if (scentBoard[0][ny][nx] == 0)
                     return dir;
-                else if (scentBoard[ny][nx] == shark.num && myScent == 0)
+                else if (scentBoard[0][ny][nx] == shark.num && myScent == 0)
                     myScent = dir;
             }
         }
@@ -111,24 +109,18 @@ public class Main {
     }
 
     private static void removeScent() {
-        Iterator<int[]> iter = scentList.iterator();
-        while (iter.hasNext()) {
-            int[] scent = iter.next();
-            int y = scent[0], x = scent[1], num = scent[2];
-            if (--scent[3] == 0) {
-                iter.remove();
-                num = 0;
-            }
-            scentBoard[y][x] = num;
-        }
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                if (scentBoard[0][i][j] != 0 && --scentBoard[1][i][j] == 0)
+                    scentBoard[0][i][j] = 0;
     }
 
     private static void putScent() {
         while (!scentDeque.isEmpty()) {
             int[] scent = scentDeque.poll();
             int y = scent[0], x = scent[1], num = scent[2];
-            scentList.add(new int[] { y, x, num, k });
-            scentBoard[y][x] = num;
+            scentBoard[0][y][x] = num;
+            scentBoard[1][y][x] = k;
         }
     }
 
