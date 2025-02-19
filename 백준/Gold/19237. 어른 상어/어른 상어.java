@@ -26,7 +26,7 @@ public class Main {
     static int[][][] scentBoard;
     static boolean[][] visited;
     static Deque<Shark> sharks = new ArrayDeque<>();
-    static Deque<int[]> scentDeque = new LinkedList<>();
+    static Deque<int[]> scentDeque = new ArrayDeque<>();
 
     static int[] dy = { 0, -1, 1, 0, 0 }, dx = { 0, 0, 0, -1, 1 };
 
