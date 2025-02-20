@@ -1,33 +1,35 @@
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.PriorityQueue;
 
 public class Main {
 
+    static int n;
+    static int[] dp;
     static ArrayList<ArrayList<Integer>> tree = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-        int n = read();
+        n = read();
+        dp = new int[n];
         for (int i = 0; i < n; i++) {
             tree.add(new ArrayList<>());
-            int p = read();
-            if (p != -1)
-                tree.get(p).add(i);
+            int parent = read();
+            if (parent == -1)
+                continue;
+            tree.get(parent).add(i);
         }
-        System.out.println(recursive(0));
+        recursive(0);
+        System.out.println(dp[0]);
     }
 
-    private static int recursive(int n) {
-        ArrayList<Integer> sub = tree.get(n);
-        int len = sub.size();
-        Integer[] arr = new Integer[len];
-        int max = 0;
-        for (int i = 0; i < len; i++) {
-            arr[i] = recursive(sub.get(i));
+    private static void recursive(int cur) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        for (int next : tree.get(cur)) {
+            recursive(next);
+            pq.offer(dp[next]);
         }
-        Arrays.sort(arr, (o1, o2) -> o2.compareTo(o1));
-        for (int i = 0; i < len; i++)
-            max = Math.max(max, arr[i] + (i + 1));
-        return max;
+        int time = 1;
+        while(!pq.isEmpty())
+            dp[cur] = Math.max(dp[cur], pq.poll() + time++);
     }
 
     private static int read() throws Exception {
@@ -37,6 +39,8 @@ public class Main {
             n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
         return m ? ~n + 1 : n;
     }
 }
