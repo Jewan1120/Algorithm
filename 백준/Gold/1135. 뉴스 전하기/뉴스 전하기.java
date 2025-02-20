@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.Collections;
 
 public class Main {
 
@@ -22,14 +22,14 @@ public class Main {
     }
 
     private static void recursive(int cur) {
-        PriorityQueue<Integer> pq = new PriorityQueue<>((o1, o2) -> o2 - o1);
+        ArrayList<Integer> al = new ArrayList<>();
         for (int next : tree.get(cur)) {
             recursive(next);
-            pq.offer(dp[next]);
+            al.add(dp[next]);
         }
-        int time = 1;
-        while(!pq.isEmpty())
-            dp[cur] = Math.max(dp[cur], pq.poll() + time++);
+        Collections.sort(al, Collections.reverseOrder());
+        for (int i = 0; i < al.size(); i++)
+            dp[cur] = Math.max(dp[cur], al.get(i) + i + 1);
     }
 
     private static int read() throws Exception {
