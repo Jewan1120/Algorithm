@@ -3,7 +3,7 @@ class Solution {
         int n = players.length;
         int total = 0;
         for (int i = 0; i < n; i++) {
-            int needs = (int) Math.floor((double) players[i] / m);
+            int needs = players[i] / m;
             if (needs == 0)
                 continue;
             total += needs;
