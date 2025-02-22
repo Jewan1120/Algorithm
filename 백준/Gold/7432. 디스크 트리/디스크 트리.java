@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class Main {
@@ -16,18 +17,15 @@ public class Main {
             }
         }
 
-        String print() {
-            StringBuilder sb = new StringBuilder();
+        String print(StringBuilder sb) {
             print(0, this, sb);
             return sb.toString();
         }
 
         void print(int depth, Node cur, StringBuilder sb) {
-            for (String str : cur.next.keySet()) {
-                for (int i = 0; i < depth; i++)
-                    sb.append(" ");
-                sb.append(str).append("\n");
-                print(depth + 1, cur.next.get(str), sb);
+            for (Map.Entry<String, Node> entry : cur.next.entrySet()) {
+                sb.append(" ".repeat(depth)).append(entry.getKey()).append("\n");
+                print(depth + 1, entry.getValue(), sb);
             }
         }
     }
@@ -38,6 +36,7 @@ public class Main {
         Node root = new Node();
         while (n-- > 0)
             root.insert(br.readLine());
-        System.out.println(root.print());
+        StringBuilder sb = new StringBuilder();
+        System.out.println(root.print(sb));
     }
 }
