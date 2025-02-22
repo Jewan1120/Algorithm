@@ -16,21 +16,21 @@ public class Main {
             }
         }
 
-        void print() {
-            print(0, this);
+        String print() {
+            StringBuilder sb = new StringBuilder();
+            print(0, this, sb);
+            return sb.toString();
         }
 
-        void print(int depth, Node cur) {
+        void print(int depth, Node cur, StringBuilder sb) {
             for (String str : cur.next.keySet()) {
                 for (int i = 0; i < depth; i++)
                     sb.append(" ");
                 sb.append(str).append("\n");
-                print(depth + 1, cur.next.get(str));
+                print(depth + 1, cur.next.get(str), sb);
             }
         }
     }
-
-    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -38,7 +38,6 @@ public class Main {
         Node root = new Node();
         while (n-- > 0)
             root.insert(br.readLine());
-        root.print();
-        System.out.println(sb);
+        System.out.println(root.print());
     }
 }
