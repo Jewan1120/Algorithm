@@ -18,7 +18,24 @@ public class Main {
 
     private static void recursive(int depth) {
         if (depth == 9) {
-            int score = simulate();
+            int score = 0, index = 0;
+            for (int i = 0; i < n; i++) {
+                int[] round = rounds[i];
+                int result = 0, outCount = 0;
+                while (outCount < 3) {
+                    int oper = round[orders[index++]];
+                    if (index == 9)
+                        index = 0;
+                    if (oper == 0) {
+                        outCount++;
+                        continue;
+                    }
+                    result <<= oper;
+                    result |= (1 << (oper - 1));
+                    score += Integer.bitCount(result >> 3);
+                    result &= 7;
+                }
+            }
             maxScore = Math.max(maxScore, score);
             return;
         }
@@ -33,27 +50,6 @@ public class Main {
                 recursive(depth + 1);
                 visited[i] = false;
             }
-    }
-
-    private static int simulate() {
-        int score = 0, index = 0;
-        for (int i = 0; i < n; i++) {
-            int[] round = rounds[i];
-            int result = 0, outCount = 0;
-            while (outCount < 3) {
-                int oper = round[orders[index]];
-                index = (index + 1) % 9;
-                if (oper == 0) {
-                    outCount++;
-                    continue;
-                }
-                result <<= oper;
-                result |= (1 << (oper - 1));
-                score += Integer.bitCount(result >> 3);
-                result &= 7;
-            }
-        }
-        return score;
     }
 
     private static int read() throws Exception {
