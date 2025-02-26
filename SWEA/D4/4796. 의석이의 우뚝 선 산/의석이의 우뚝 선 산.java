@@ -1,19 +1,16 @@
-import java.util.Scanner;
-
 public class Solution {
 
     public static void main(String[] args) throws Exception {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
+        int t = read();
         StringBuilder sb = new StringBuilder();
         int n;
         for (int tc = 1; tc <= t; tc++) {
-            n = sc.nextInt();
+            n = read();
             int cur = 0, prev = 0;
             int totalCnt = 0, uCnt = 0;
             boolean dFlag = false;
             for (int i = 0; i < n; i++) {
-                cur = sc.nextInt();
+                cur = read();
                 if (prev < cur) {
                     if (dFlag) {
                         uCnt = 1;
@@ -29,5 +26,14 @@ public class Solution {
             sb.append("#").append(tc).append(" ").append(totalCnt).append("\n");
         }
         System.out.println(sb);
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
+        return n;
     }
 }
