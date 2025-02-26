@@ -8,11 +8,8 @@ public class Main {
         for (int i = 0; i < n; i++)
             arr[i] = read();
         Arrays.sort(arr);
-        for (int i = 0; i < n; i++)
-            if (arr[i] <= l)
-                l++;
-            else
-                break;
+        for (int i = 0; i < n && arr[i] <= l; i++)
+            l++;
         System.out.println(l);
     }
 
