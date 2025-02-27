@@ -1,27 +1,21 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-
 public class Main {
 
     static int r, c;
     static boolean[][] board;
 
     public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        r = Integer.parseInt(st.nextToken());
-        c = Integer.parseInt(st.nextToken());
+        r = read();
+        c = read();
         board = new boolean[r][c];
         for (int i = 0; i < r; i++) {
-            String line = br.readLine();
             for (int j = 0; j < c; j++)
-                if (line.charAt(j) == 'x')
+                if (System.in.read() == 'x')
                     board[i][j] = true;
+            System.in.read();
         }
         int cnt = 0;
         for (int i = 0; i < r; i++)
-            if(dfs(i, 0))
+            if (dfs(i, 0))
                 cnt++;
         System.out.println(cnt);
     }
@@ -46,5 +40,14 @@ public class Main {
 
     private static boolean isValid(int y, int x) {
         return 0 <= y && y < r && 0 <= x && x < c && !board[y][x];
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
+        return n;
     }
 }
