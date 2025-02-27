@@ -23,31 +23,16 @@ public class Main {
     private static boolean dfs(int y, int x) {
         if (x == c)
             return true;
-        if (!isValid(y, x))
-            return false;
+        if (y < 0 || y >= r || board[y][x]) 
+            return false; 
         board[y][x] = true;
-        if (!dfs(y - 1, x + 1))
-            if (!dfs(y, x + 1))
-                if (!dfs(y + 1, x + 1))
-                    return false;
-                else
-                    return true;
-            else
-                return true;
-        else
-            return true;
-    }
-
-    private static boolean isValid(int y, int x) {
-        return 0 <= y && y < r && 0 <= x && x < c && !board[y][x];
+        return dfs(y - 1, x + 1) || dfs(y, x + 1) || dfs(y + 1, x + 1);
     }
 
     private static int read() throws Exception {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
-        if (c == 13)
-            System.in.read();
         return n;
     }
 }
