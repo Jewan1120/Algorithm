@@ -1,19 +1,20 @@
 class Solution {
     public int solution(int n, long l, long r) {
-        int answer = 0;
-        next: for (long i = l; i <= r; i++) {
-            long tmp = i;
-            long cnt = n - 1;
-            while (cnt > 0) {
-                long div = (long) Math.pow(5, cnt);
-                if (tmp / div == 2 || tmp % div == 3) {
-                    continue next;
-                }
-                tmp %= div;
-                cnt--;
-            }
-            answer++;
+        return recursive(1, (long) Math.pow(5, n), l, r);
+    }
+    
+    private int recursive(long s, long e, long l, long r) {
+        if (e <= l || r < s)
+            return 0;
+        if (e - s == 1)
+            return 1;
+        long size = (e - s + 1) / 5;
+        int count = 0;
+        for (int i = 0; i < 5; i++) {
+            if (i == 2)
+                continue;
+            count += recursive(s + i * size, s + (i + 1) * size, l, r);
         }
-        return answer;
+        return count;
     }
 }
