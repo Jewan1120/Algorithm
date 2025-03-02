@@ -1,28 +1,37 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        int n = read(), w = 0;
-        HashSet<Integer> hs = new HashSet<>();
-        hs.add(0);
-        for (int i = 0; i < n; i++) {
-            w = read();
-            ArrayList<Integer> al = new ArrayList<>(hs);
-            for (int v : al) {
-                if (v + w <= 40_000)
-                    hs.add(v + w);
-                if (v - w > 0)
-                    hs.add(v - w);
-                if (w - v > 0)
-                    hs.add(w - v);
+        int n = read();
+        int[] weights = new int[n + 1];
+        for (int i = 1; i < n + 1; i++)
+            weights[i] = read();
+        int m = read(), maxTarget = 0;
+        int[] targets = new int[m];
+        for (int i = 0; i < m; i++) {
+            targets[i] = read();
+            maxTarget = Math.max(maxTarget, targets[i]);
+        }
+        boolean[] dp = new boolean[maxTarget + 501];
+        dp[0] = true;
+        int w;
+        for (int i = 1; i < n + 1; i++) {
+            w = weights[i];
+            boolean[] temp = dp.clone();
+            for (int j = dp.length - 1; j >= 0; j--) {
+                if (dp[j]) {
+                    if (j + w < dp.length)
+                        temp[j + w] = true;
+                    if (j - w >= 0)
+                        temp[j - w] = true;
+                    if (w - j >= 0)
+                        temp[w - j] = true;
+                }
             }
+            dp = temp;
         }
         StringBuilder sb = new StringBuilder();
-        n = read();
-        for (int i = 0; i < n; i++)
-            sb.append(hs.contains(read()) ? 'Y' : 'N').append(' ');
+        for (int i = 0; i < m; i++)
+            sb.append(dp[targets[i]] ? 'Y' : 'N').append(' ');
         System.out.println(sb);
     }
 
