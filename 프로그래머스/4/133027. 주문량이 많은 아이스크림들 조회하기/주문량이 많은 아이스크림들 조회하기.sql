@@ -1,16 +1,19 @@
-SELECT
-    FLAVOR
-FROM(
+WITH TOTAL AS (
     SELECT
         *
     FROM
         JULY 
     UNION ALL
-        SELECT
-            *
-        FROM
-            FIRST_HALF
-    ) ORDERS
+    SELECT
+        *
+    FROM
+        FIRST_HALF
+)
+
+SELECT
+    FLAVOR
+FROM
+    TOTAL
 GROUP BY
     FLAVOR
 ORDER BY
