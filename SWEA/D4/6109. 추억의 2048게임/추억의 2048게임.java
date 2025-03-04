@@ -73,19 +73,22 @@ public class Solution {
     private static void goStraight(int y, int x) {
         if (board[y][x] == 0)
             return;
-        int ny = y + dy[dir], nx = x + dx[dir];
-        while (isValid(ny, nx) && board[ny][nx] == 0) {
-            board[ny][nx] = board[y][x];
-            board[y][x] = 0;
-            y = ny;
-            x = nx;
-            ny = y + dy[dir];
-            nx = x + dx[dir];
+        int value = board[y][x];
+        int ny = y, nx = x;
+        while (true) {
+            int ty = ny + dy[dir], tx = nx + dx[dir];
+            if (!isValid(ty, tx) || board[ty][tx] != 0)
+                break;
+            board[ty][tx] = value;
+            board[ny][nx] = 0;
+            ny = ty;
+            nx = tx;
         }
-        if (isValid(ny, nx) && board[ny][nx] == board[y][x] && !merged[ny][nx]) {
-            board[ny][nx] *= 2;
-            board[y][x] = 0;
-            merged[ny][nx] = true;
+        int ty = ny + dy[dir], tx = nx + dx[dir];
+        if (isValid(ty, tx) && board[ty][tx] == value && !merged[ty][tx]) {
+            board[ty][tx] *= 2;
+            board[ny][nx] = 0;
+            merged[ty][tx] = true;
         }
     }
 
