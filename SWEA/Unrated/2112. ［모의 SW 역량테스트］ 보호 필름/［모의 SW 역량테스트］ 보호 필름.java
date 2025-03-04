@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 public class Solution {
 
     static int d, w, k;
+    static boolean[][] board;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,43 +18,38 @@ public class Solution {
             d = Integer.parseInt(st.nextToken());
             w = Integer.parseInt(st.nextToken());
             k = Integer.parseInt(st.nextToken());
-            boolean[][] board = new boolean[d][w];
+            board = new boolean[d][w];
             for (int i = 0; i < d; i++) {
                 st = new StringTokenizer(br.readLine());
                 for (int j = 0; j < w; j++)
                     board[i][j] = Integer.parseInt(st.nextToken()) == 1;
             }
-            for (int i = 0; i <= k; i++) {
-                if (recursive(i, 0, board)) {
+            for (int i = 0; i <= k; i++)
+                if (recursive(i, 0)) {
                     sb.append("#").append(tc).append(" ").append(i).append("\n");
                     break;
                 }
-            }
         }
         System.out.println(sb);
     }
 
-    private static boolean recursive(int depth, int p, boolean[][] board) {
+    private static boolean recursive(int depth, int p) {
         if (depth == 0)
-            return isPossible(board);
+            return isPossible();
         for (int i = p; i < d; i++) {
-            if (recursive(depth - 1, i + 1, masking(i, true, board)))
+            boolean[] line = board[i].clone();
+            Arrays.fill(board[i], true);
+            if (recursive(depth - 1, i + 1))
                 return true;
-            if (recursive(depth - 1, i + 1, masking(i, false, board)))
+            board[i] = new boolean[w];
+            if (recursive(depth - 1, i + 1))
                 return true;
+            board[i] = line;
         }
         return false;
     }
 
-    private static boolean[][] masking(int l, boolean mask, boolean[][] board) {
-        boolean[][] nextBoard = new boolean[d][w];
-        for (int i = 0; i < d; i++)
-            nextBoard[i] = board[i].clone();
-        Arrays.fill(nextBoard[l], mask);
-        return nextBoard;
-    }
-
-    private static boolean isPossible(boolean[][] board) {
+    private static boolean isPossible() {
         boolean flag;
         int cnt;
         for (int i = 0; i < w; i++) {
@@ -66,10 +62,10 @@ public class Solution {
                     flag = board[j][i];
                     cnt = 1;
                 }
-                if (cnt == k)
+                if (cnt >= k)
                     break;
             }
-            if (cnt != k)
+            if (cnt < k)
                 return false;
         }
         return true;
