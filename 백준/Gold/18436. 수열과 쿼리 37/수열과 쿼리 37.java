@@ -28,8 +28,9 @@ public class Main {
             sgt[idx][arr[s] % 2]++;
         else {
             int m = (s + e) >> 1;
-            build(idx << 1, s, m);
-            build((idx << 1) + 1, m + 1, e);
+            int l = idx << 1, r = l | 1;
+            build(l, s, m);
+            build(r, m + 1, e);
             sgt[idx][0] = sgt[idx << 1][0] + sgt[(idx << 1) + 1][0];
             sgt[idx][1] = sgt[idx << 1][1] + sgt[(idx << 1) + 1][1];
         }
@@ -37,17 +38,20 @@ public class Main {
 
     private static void update(int idx, int s, int e, int target, int newValue) {
         if (s == e) {
-            sgt[idx][arr[target] % 2]--;
-            sgt[idx][newValue % 2]++;
+            if ((arr[target] % 2) != (newValue % 2)) {
+                sgt[idx][arr[target] % 2]--;
+                sgt[idx][newValue % 2]++;
+            }
             arr[target] = newValue;
         } else {
             int m = (s + e) >> 1;
+            int l = idx << 1, r = l | 1;
             if (target <= m)
-                update(idx << 1, s, m, target, newValue);
+                update(l, s, m, target, newValue);
             else
-                update((idx << 1) + 1, m + 1, e, target, newValue);
-            sgt[idx][0] = sgt[idx << 1][0] + sgt[(idx << 1) + 1][0];
-            sgt[idx][1] = sgt[idx << 1][1] + sgt[(idx << 1) + 1][1];
+                update(r, m + 1, e, target, newValue);
+            sgt[idx][0] = sgt[l][0] + sgt[r][0];
+            sgt[idx][1] = sgt[l][1] + sgt[r][1];
         }
     }
 
@@ -57,10 +61,7 @@ public class Main {
         if (l <= s && e <= r)
             return sgt[idx][oper % 2];
         int m = (s + e) >> 1;
-        int result = 0;
-        result += query(idx << 1, oper, s, m, l, r);
-        result += query((idx << 1) + 1, oper, m + 1, e, l, r);
-        return result;
+        return query(idx << 1, oper, s, m, l, r) + query((idx << 1) + 1, oper, m + 1, e, l, r);
     }
 
     private static int read() throws Exception {
