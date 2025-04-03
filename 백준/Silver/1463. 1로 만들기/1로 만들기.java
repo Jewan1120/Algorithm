@@ -1,22 +1,41 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        br.close();
-        int[] dp = new int[N + 1];
-        for (int i = 2; i <= N; i++) {
-            dp[i] = dp[i - 1] + 1;
-            if (i % 3 == 0) {
-                dp[i] = Math.min(dp[i / 3] + 1, dp[i]);
+
+    public static void main(String[] args) throws Exception {
+        int n = read();
+        int[] dp = new int[n + 1];
+        dp[n] = 0;
+        Deque<Integer> dq = new ArrayDeque<>();
+        dq.offer(n);
+        while (!dq.isEmpty()) {
+            int cur = dq.poll();
+            if (cur == 1) {
+                System.out.println(dp[cur]);
+                return;
             }
-            if (i % 2 == 0) {
-                dp[i] = Math.min(dp[i / 2] + 1, dp[i]);
+            if (cur % 3 == 0 && dp[cur / 3] == 0) {
+                dp[cur / 3] = dp[cur] + 1;
+                dq.offer(cur / 3);
+            }
+            if (cur % 2 == 0 && dp[cur / 2] == 0) {
+                dp[cur / 2] = dp[cur] + 1;
+                dq.offer(cur / 2);
+            }
+            if (dp[cur - 1] == 0) {
+                dp[cur - 1] = dp[cur] + 1;
+                dq.offer(cur - 1);
             }
         }
-        System.out.println(dp[N]);
+    }
+
+    private static int read() throws Exception {
+        int c, n = System.in.read() & 15;
+        while ((c = System.in.read()) >= 48)
+            n = (n << 3) + (n << 1) + (c & 15);
+        if (c == 13)
+            System.in.read();
+        return n;
     }
 }
