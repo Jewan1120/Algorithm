@@ -2,10 +2,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         int n = read();
-
         boolean[][] board = new boolean[n][n];
         long[][][] dp = new long[3][n][n];
-
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
                 board[i][j] = (read() == 0);
@@ -29,8 +27,6 @@ public class Main {
         int c, n = System.in.read() & 15;
         while ((c = System.in.read()) >= 48)
             n = (n << 3) + (n << 1) + (c & 15);
-        if (c == 13)
-            System.in.read();
         return n;
     }
 }
