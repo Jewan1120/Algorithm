@@ -1,3 +1,5 @@
+import java.util.TreeSet;
+
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -9,9 +11,15 @@ public class Main {
         for (int i = 1; i < n; i++)
             gcd = gcd(gcd, Math.abs(arr[i] - arr[i - 1]));
         StringBuilder sb = new StringBuilder();
-        for (int i = 2; i <= gcd; i++)
-            if (gcd % i == 0)
-                sb.append(i).append(" ");
+        TreeSet<Integer> ts = new TreeSet<>();
+        for (int i = 1; i <= Math.sqrt(gcd); i++)
+            if (gcd % i == 0) {
+                ts.add(i);
+                ts.add(gcd / i);
+            }
+        ts.remove(1);
+        for (int i : ts)
+            sb.append(i).append(" ");
         System.out.println(sb);
     }
 
