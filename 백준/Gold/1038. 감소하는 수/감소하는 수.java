@@ -1,36 +1,54 @@
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 
-    static ArrayList<Long> al = new ArrayList<>();
+	static int tenCm[];
+	static StringBuilder answer;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		answer = new StringBuilder();
+		int n = Integer.parseInt(br.readLine());
+		int jari = 0;
+		int total = -1;
+		for (int i = 1; i <= 10; i++) {
+			total += nCm(10, i);
+			if (total >= n) {
+				jari = i;
+				break;
+			}
+		}
+		int m = n;
+		for (int i = 1; i < jari; i++)
+			m -= nCm(10, jari - i);
+		find(jari, m);
+		if (answer.toString().length() == 0)
+			answer.append(-1);
+		System.out.println(answer);
+	}
 
-    public static void main(String[] args) throws Exception {
-        int n = read();
-        for (int i = 0; i < 10; i++) {
-            recursive(i, 1);
-        }
-        al.sort((o1, o2) -> o1.compareTo(o2));
-        if (n < al.size())
-            System.out.println(al.get(n));
-        else
-            System.out.println(-1);
-    }
+	public static int nCm(int n, int m) {
+		int now = 1;
+		for (int i = 0; i < m; i++) {
+			now *= (n - i);
+		}
+		for (int i = m; i > 0; i--) {
+			now /= i;
+		}
+		return now;
+	}
 
-    private static void recursive(long m, int p) {
-        if (p > 10)
-            return;
-        al.add(m);
-        for (int i = 0; i < m % 10; i++) {
-            recursive((m * 10) + i, p + 1);
-        }
-    }
-
-    private static int read() throws Exception {
-        int c, n = System.in.read() & 15;
-        while ((c = System.in.read()) >= 48)
-            n = (n << 3) + (n << 1) + (c & 15);
-        if (c == 13)
-            System.in.read();
-        return n;
-    }
+	public static void find(int jari, int rest) {
+		if (jari == 0) {
+			return;
+		}
+		int now = jari - 1;
+		while (rest >= nCm(now + 1, jari)) {
+			now++;
+		}
+		rest -= nCm(now, jari);
+		answer.append(now);
+		find(jari - 1, rest);
+	}
 }
